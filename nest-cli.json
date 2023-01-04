@@ -1,8 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/chatik/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/chatik/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/chatik",
+  "projects": {
+    "chatik": {
+      "type": "application",
+      "root": "apps/chatik",
+      "entryFile": "main",
+      "sourceRoot": "apps/chatik/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chatik/tsconfig.app.json"
+      }
+    },
+    "chatik-ws": {
+      "type": "application",
+      "root": "apps/chatik-ws",
+      "entryFile": "main",
+      "sourceRoot": "apps/chatik-ws/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chatik-ws/tsconfig.app.json"
+      }
+    }
   }
 }
