@@ -2,7 +2,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities';
 import { PgRepo } from './base.pg-repo';
 import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 
+
+@Injectable()
 export class UserPgRepo extends PgRepo<UserEntity, 'user_id'> {
   public constructor(
     @InjectRepository(UserEntity)

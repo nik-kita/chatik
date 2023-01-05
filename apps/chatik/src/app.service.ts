@@ -1,4 +1,5 @@
-import { UserPgRepo } from '@app/pg-db';
+// TODO jest don't see app aliases... should be replaced with @app/pg-db
+import { UserPgRepo } from '../../../libs/pg-db/src';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
