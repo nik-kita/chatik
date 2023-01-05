@@ -28,5 +28,5 @@ export const AppDataSource = new DataSource({
     synchronize: false,
     logging: true,
     database: dsEnv.PG_DB_NAME,
-    migrations: [join(__dirname, 'migrations')],
+    migrations: [join(__dirname, 'migrations/*')],
 });
