@@ -58,7 +58,21 @@ async function main() {
 
     console.log(res);
   } else if (type === 'run') {
+    const res = await new Promise((resolve, reject) => {
+      exec(`FORCE_COLOR=true npx typeorm-ts-node-esm migration:run -d ${join(__dirname, 'data-source.ts')}`,
+        (err, stdOut, stdErr) => {
+          if (err || stdErr) {
+            console.error(err || stdErr);
 
+            return reject(err);
+
+          } else {
+            resolve(stdOut);
+          }
+        });
+    });
+
+    console.log(res);
   } else if (type === 'revert') {
 
   }

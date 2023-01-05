@@ -27,7 +27,6 @@ export const AppDataSource = new DataSource({
     password: dsEnv.PG_PASSWORD,
     synchronize: false,
     logging: true,
+    database: dsEnv.PG_DB_NAME,
     migrations: [join(__dirname, 'migrations')],
 });
-
-export const { PG_DB_NAME } = dsEnv;
