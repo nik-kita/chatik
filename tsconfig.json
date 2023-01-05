@@ -18,11 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/config": [
-        "libs/config/src"
-      ],
-      "@app/config/*": [
-        "libs/config/src/*"
+      "@app/config/chatik": [
+        "libs/config/src/chatik"
       ]
     }
   }
