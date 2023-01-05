@@ -18,6 +18,8 @@ async function main() {
     },
   ]);
 
+  const dsPath = join(__dirname, 'data-source.ts');
+
   if (type === 'show') {
     const res = await new Promise((resolve, reject) => {
       exec(`npx typeorm-ts-node-esm migration:show -d ${join(__dirname, 'data-source.ts')}`,
@@ -59,7 +61,7 @@ async function main() {
     console.log(res);
   } else if (type === 'run') {
     const res = await new Promise((resolve, reject) => {
-      exec(`FORCE_COLOR=true npx typeorm-ts-node-esm migration:run -d ${join(__dirname, 'data-source.ts')}`,
+      exec(`FORCE_COLOR=true npx typeorm-ts-node-esm migration:run -d ${dsPath}`,
         (err, stdOut, stdErr) => {
           if (err || stdErr) {
             console.error(err || stdErr);
@@ -74,6 +76,21 @@ async function main() {
 
     console.log(res);
   } else if (type === 'revert') {
+    const res = await new Promise((resolve, reject) => {
+      exec(`FORCE_COLOR=true npx typeorm-ts-node-esm migration:revert -d ${dsPath}`,
+        (err, stdOut, stdErr) => {
+          if (err || stdErr) {
+            console.error(err || stdErr);
+
+            return reject(err);
+
+          } else {
+            resolve(stdOut);
+          }
+        });
+    });
+
+    console.log(res);
 
   }
 }
