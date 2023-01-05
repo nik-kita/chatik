@@ -29,4 +29,10 @@ export class FullConfig {
   @Min(3000)
   @Max(9999)
   CHATIK_PORT = 3333;
+
+  @Transform(({ value }) => +value)
+  @IsInt()
+  @Min(3000)
+  @Max(9999)
+  AUTH_PORT = 3000;
 }
