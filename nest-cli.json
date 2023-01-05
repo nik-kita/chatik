@@ -37,13 +37,13 @@
         "tsConfigPath": "libs/config/tsconfig.lib.json"
       }
     },
-    "pg-entities": {
+    "pg-db": {
       "type": "library",
-      "root": "libs/pg-entities",
+      "root": "libs/pg-db",
       "entryFile": "index",
-      "sourceRoot": "libs/pg-entities/src",
+      "sourceRoot": "libs/pg-db/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/pg-entities/tsconfig.lib.json"
+        "tsConfigPath": "libs/pg-db/tsconfig.lib.json"
       }
     },
     "chatik-auth": {

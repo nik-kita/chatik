@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { PgEntitiesConfigModule, PgEntitiesEnv } from '@app/config/pg-entities';
+import { PgEntitiesEnv } from '@app/config/common';
 
 @Module({
-  imports: [PgEntitiesConfigModule, TypeOrmModule.forRootAsync({
+  imports: [TypeOrmModule.forRootAsync({
     inject: [ConfigService],
     useFactory(config: ConfigService<PgEntitiesEnv>): TypeOrmModuleOptions {
 
@@ -21,4 +21,4 @@ import { PgEntitiesConfigModule, PgEntitiesEnv } from '@app/config/pg-entities';
     },
   })],
 })
-export class PgEntitiesModule {}
+export class PgDbModule {}

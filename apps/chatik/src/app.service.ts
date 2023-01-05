@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../../libs/pg-entities/src';
+import { UserEntity } from '../../../libs/pg-db/src';
 import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()

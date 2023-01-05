@@ -21,14 +21,14 @@
       "@app/config/chatik": [
         "libs/config/src/chatik"
       ],
-      "@app/config/pg-entities": [
-        "libs/config/src/pg-entities"
+      "@app/config/common": [
+        "libs/config/src/common"
       ],
       "@app/config/chatik-auth": [
         "libs/config/src/chatik-auth"
       ],
-      "@app/pg-entities": [
-        "libs/pg-entities/src"
+      "@app/pg-db": [
+        "libs/pg-db/src"
       ]
     }
   }
