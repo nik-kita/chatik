@@ -45,6 +45,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/pg-entities/tsconfig.lib.json"
       }
+    },
+    "chatik-auth": {
+      "type": "application",
+      "root": "apps/chatik-auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/chatik-auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chatik-auth/tsconfig.app.json"
+      }
     }
   }
 }
