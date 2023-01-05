@@ -15,5 +15,4 @@ export class userAddEmailPassword1672893821012 implements MigrationInterface {
             DROP COLUMN email;
         `);
     }
-
 }
