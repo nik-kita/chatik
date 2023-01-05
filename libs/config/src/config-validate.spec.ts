@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import { configValidate } from './config.validate';
+import { configValidate } from './config-validate';
 
 class SuccessFixture {
   @IsString()
