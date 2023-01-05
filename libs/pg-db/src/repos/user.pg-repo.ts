@@ -4,7 +4,7 @@ import { PgRepo } from './base.pg-repo';
 import { Repository } from 'typeorm';
 
 export class UserPgRepo extends PgRepo<UserEntity, 'user_id'> {
-  protected constructor(
+  public constructor(
     @InjectRepository(UserEntity)
     repo: Repository<UserEntity>,
   ) {

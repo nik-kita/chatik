@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatikConfigModule } from '@app/config/chatik';
-import { PgDbModule, UserEntity } from '@app/pg-db';
+import { PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -10,6 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UserEntity,
   ])],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserPgRepo],
 })
 export class AppModule {}

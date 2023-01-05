@@ -1,32 +1,26 @@
+import { UserPgRepo } from '@app/pg-db';
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../../../libs/pg-db/src';
-import { FindOptionsWhere, Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
+    private readonly userRepo: UserPgRepo,
   ) {}
 
-  getUsers<W extends FindOptionsWhere<UserEntity>>(where: W, options: {
-    select?: (keyof UserEntity)[],
+  createUser(email: string, password: string) {
+    return this.userRepo.insert({ email, password });
+  }
+
+  getFirstIds(pagination: {
     limit?: number,
-    offset?: number,
+    skip?: number,
   } = {}) {
     const {
-      select = ['user_id'],
-      limit = 10,
-      offset = 0,
-    } = options;
+      limit,
+      skip,
+    } = pagination;
 
-    return this.userRepo.find({
-      where,
-      select,
-      take: limit,
-      skip: offset,
-    }) as Promise<Pick<UserEntity, typeof select[number]>[] | null>
+    return this.userRepo.get({}, { limit, skip });
   }
 
   getHello(): string {

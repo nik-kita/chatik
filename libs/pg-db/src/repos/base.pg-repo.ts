@@ -1,14 +1,24 @@
-import { FindManyOptions, Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 // TODO replace 'object' with concrete type for app entities
-export abstract class PgRepo<E extends object, PK extends keyof E> {
+export abstract class PgRepo<
+  E extends object, 
+  PK extends keyof E,
+  InsertE extends Partial<Omit<E, PK>> = Partial<Omit<E, PK>>,
+> {
   protected constructor(
     protected repo: Repository<E>,
     protected pk: PK,
   ) { }
 
+  insert(data: InsertE | InsertE[]) {
+    console.log(data);
+    // TODO rm any!
+    return this.repo.insert(data as any);
+  }
+
   get<
-    W extends FindManyOptions<E>['where'],
+    W extends FindOptionsWhere<E>,
     S extends (keyof E)[] = [typeof this.pk],
   >(
     where: W,
