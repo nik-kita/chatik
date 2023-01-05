@@ -10,4 +10,14 @@ export class UserPgRepo extends PgRepo<UserEntity, 'user_id'> {
   ) {
     super(repo, 'user_id');
   }
+
+  getByEmail<S extends (keyof UserEntity)[]>(
+    email: string,
+    select = ['email', 'password', 'user_id'] as S, // TODO check is type correctly help define keys for result
+  ) {
+    return this.repo.findOne({
+      where: { email },
+      select,
+    }) as Promise<Exclude<UserEntity, S> | null>;
+  }
 }

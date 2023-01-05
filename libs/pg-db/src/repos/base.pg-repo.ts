@@ -14,7 +14,14 @@ export abstract class PgRepo<
   insert(data: InsertE | InsertE[]) {
     console.log(data);
     // TODO rm any!
-    return this.repo.insert(data as any);
+    return this.repo.insert(data as any); // TODO return { [PK]: string } res
+  }
+
+  getByPK<S extends (keyof E)[]>(pk: Pick<E, PK>, select?: S) {
+    return this.repo.findOne({
+      where: pk as FindOptionsWhere<E>,
+      select,
+    });
   }
 
   get<
