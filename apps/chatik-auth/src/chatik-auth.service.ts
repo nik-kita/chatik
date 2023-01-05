@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserPgRepo } from '@app/pg-db';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ChatikAuthService {
-  constructor(private readonly userRepo: UserPgRepo) {}
+  constructor(private readonly userRepo: UserPgRepo) { }
 
   async register(data: {
     email: string,
@@ -14,19 +14,22 @@ export class ChatikAuthService {
     return insertRes;
   }
 
-  async login(data: {
+  async validateUser(data: {
     email: string,
     password: string,
   }) {
     const { email, password } = data;
-    const user = await this.userRepo.getByEmail(email);
+    const user = await this.userRepo.getByEmail(email, ['user_id', 'password']);
 
     // TODO hash passwords
     if (user && user.password === password) {
-      return 'welcome!';
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ..._user } = user;
+
+      return _user;
     }
 
-    throw new UnauthorizedException();
+    return null;
   }
 
 

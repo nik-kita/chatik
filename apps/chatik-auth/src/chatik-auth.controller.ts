@@ -19,7 +19,7 @@ export class ChatikAuthController {
   login(
     @Body() body: LoginReqDto,
   ) {
-    return this.chatikAuthService.login(body);
+    return this.chatikAuthService.validateUser(body);
   }
 
   @Get()
