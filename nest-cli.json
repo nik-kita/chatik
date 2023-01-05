@@ -36,6 +36,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/config/tsconfig.lib.json"
       }
+    },
+    "pg-entities": {
+      "type": "library",
+      "root": "libs/pg-entities",
+      "entryFile": "index",
+      "sourceRoot": "libs/pg-entities/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/pg-entities/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -20,6 +20,12 @@
     "paths": {
       "@app/config/chatik": [
         "libs/config/src/chatik"
+      ],
+      "@app/config/pg-entities": [
+        "libs/config/src/pg-entities"
+      ],
+      "@app/pg-entities": [
+        "libs/pg-entities/src"
       ]
     }
   }
