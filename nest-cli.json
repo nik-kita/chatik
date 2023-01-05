@@ -54,6 +54,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/chatik-auth/tsconfig.app.json"
       }
+    },
+    "req-dtos": {
+      "type": "library",
+      "root": "libs/req-dtos",
+      "entryFile": "index",
+      "sourceRoot": "libs/req-dtos/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/req-dtos/tsconfig.lib.json"
+      }
     }
   }
 }

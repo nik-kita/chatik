@@ -29,6 +29,12 @@
       ],
       "@app/pg-db": [
         "libs/pg-db/src"
+      ],
+      "@app/req-dtos": [
+        "libs/req-dtos/src"
+      ],
+      "@app/req-dtos/*": [
+        "libs/req-dtos/src/*"
       ]
     }
   }
