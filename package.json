@@ -12,7 +12,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/chatik/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --selectProjects"
+    "test": "jest --selectProjects",
+    "test:all": "jest"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
