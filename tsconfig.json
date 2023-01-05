@@ -30,11 +30,8 @@
       "@app/pg-db": [
         "libs/pg-db/src"
       ],
-      "@app/req-dtos": [
-        "libs/req-dtos/src"
-      ],
-      "@app/req-dtos/*": [
-        "libs/req-dtos/src/*"
+      "@app/req-dtos/chatik-auth": [
+        "libs/req-dtos/src/chatik-auth"
       ]
     }
   }

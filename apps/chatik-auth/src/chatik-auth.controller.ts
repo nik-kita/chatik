@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ChatikAuthService } from './chatik-auth.service';
+import { RegisterReqDto, LoginReqDto } from '@app/req-dtos/chatik-auth';
 
 @Controller('auth')
 export class ChatikAuthController {
@@ -9,20 +10,14 @@ export class ChatikAuthController {
 
   @Post('register')
   register(
-    @Body() body: {
-      email: string,
-      password: string,
-    }, // TODO add DTO
+    @Body() body: RegisterReqDto,
   ) {
     return this.chatikAuthService.register(body);
   }
 
   @Post('login')
   login(
-    @Body() body: {
-      email: string,
-      password: string,
-    },
+    @Body() body: LoginReqDto,
   ) {
     return this.chatikAuthService.login(body);
   }
