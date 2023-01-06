@@ -6,7 +6,6 @@ import {
   OnGatewayInit,
   WebSocketGateway,
   WebSocketServer,
-  WsException,
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 
@@ -27,31 +26,35 @@ export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, O
     this.logger.debug('.afterInit()');
   }
 
-  async handleConnection(client: WebSocket, firstArg = {}) {
+  handleConnection(client: WebSocket, firstArg = {}) {
     const headers = (firstArg as {
       rawHeaders?: string[],
     }).rawHeaders?.reduce((acc, h, i, arr) => {
-      if ((i + 1) % 2 === 0) acc[arr[i - 1]] = h;
+      if ((i + 1) % 2 === 0) acc[arr[i - 1]] = h; 
 
       return acc;
     }, {} as { Authorization?: string });
 
     if (headers && headers.Authorization) {
-      const { user_id } = await this.jwt.verifyAsync(String(headers.Authorization.split('Bearer ').at(1)));
+      const { user_id } = this.jwt.verify(String(headers.Authorization.split('Bearer ').at(1)));
 
       console.log(user_id);
 
       return;
     }
 
-    throw new WsException({
+    // TODO find way to replace this logic into WsExceptionFilter
+    client.close(4003, JSON.stringify({
       reason: 'Ws client should have /Authorization/ header with Bearer access token',
-    });
+    }, null, 4));
+
+    return;
   }
 
-  handleDisconnect() {
+  handleDisconnect(client: any) {
     this.logger.debug(JSON.stringify({
       event: 'client is disconnected',
+      client: Object.keys(client),
     }, null, 4));
   }
 }
