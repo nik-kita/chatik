@@ -8,13 +8,14 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
+import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 
 
 @WebSocketGateway({ path: '/connecting' })
 export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
-    private jwt: JwtService,
+    private onlyAuthGuard: OnlyAuthHandleConnectionService,
   ) { }
 
   @WebSocketServer()
@@ -26,35 +27,23 @@ export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, O
     this.logger.debug('.afterInit()');
   }
 
-  handleConnection(client: WebSocket, firstArg = {}) {
-    const headers = (firstArg as {
-      rawHeaders?: string[],
-    }).rawHeaders?.reduce((acc, h, i, arr) => {
-      if ((i + 1) % 2 === 0) acc[arr[i - 1]] = h; 
+  async handleConnection(client: WebSocket, firstArg = {}) {
+    const payload = await this.onlyAuthGuard.verifyUserFromBearer(firstArg);
 
-      return acc;
-    }, {} as { Authorization?: string });
-
-    if (headers && headers.Authorization) {
-      const { user_id } = this.jwt.verify(String(headers.Authorization.split('Bearer ').at(1)));
-
-      console.log(user_id);
+    // TODO find way to replace this logic with WsException, WsExceptionFilter
+    if (!payload) {
+      client.close(4003, JSON.stringify({
+        reason: 'Ws client should have /Authorization/ header with Bearer access token',
+      }, null, 4));
 
       return;
     }
 
-    // TODO find way to replace this logic into WsExceptionFilter
-    client.close(4003, JSON.stringify({
-      reason: 'Ws client should have /Authorization/ header with Bearer access token',
-    }, null, 4));
-
-    return;
   }
 
   handleDisconnect(client: any) {
     this.logger.debug(JSON.stringify({
       event: 'client is disconnected',
-      client: Object.keys(client),
     }, null, 4));
   }
 }

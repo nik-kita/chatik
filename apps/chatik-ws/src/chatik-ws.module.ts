@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionsGateway } from './gateways/connections.gateway';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ConfigService } from '@nestjs/config';
   ],
   providers: [
     ConnectionsGateway,
+    OnlyAuthHandleConnectionService,
     UserPgRepo,
   ],
 })
