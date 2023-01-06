@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "4744a723-6fee-4f9d-b062-bd5dbeb27304",
+		"name": "chatik-auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24566114"
+	},
+	"item": [
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code !== 201) {",
+							"    return;",
+							"}",
+							"",
+							"const {",
+							"    email,",
+							"    password,",
+							"} = JSON.parse(pm.request.toJSON().body.raw);",
+							"",
+							"pm.collectionVariables.set(`${email} |email`, email);",
+							"pm.collectionVariables.set(`${email} |password`, password);",
+							"",
+							"pm.collectionVariables.set(`/auth/register |email`, email);",
+							"pm.collectionVariables.set(`/auth/register |password`, password);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"{{$randomPassword}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{chatik-auth port}}/auth/register",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{chatik-auth port}}",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hello",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}:{{chatik-auth port}}/auth",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{chatik-auth port}}",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code !== 201) {",
+							"    return;",
+							"}",
+							"",
+							"const {",
+							"    email,",
+							"    password,",
+							"} = JSON.parse(pm.request.toJSON().body.raw);",
+							"",
+							"const {",
+							"    access,",
+							"    refresh,",
+							"} = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(`${email} |access`, access);",
+							"pm.collectionVariables.set(`${email} |refresh`, refresh);",
+							"",
+							"pm.collectionVariables.set(`/auth/login |access`, access);",
+							"pm.collectionVariables.set(`/auth/login |refresh`, refresh);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{/auth/register |email}}\",\n    \"password\": \"{{/auth/register |password}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{chatik-auth port}}/auth/login",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{chatik-auth port}}",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code !== 201) {",
+							"    return;",
+							"}",
+							"",
+							"const {",
+							"    email,",
+							"    password,",
+							"} = JSON.parse(pm.request.toJSON().body.raw);",
+							"",
+							"const {",
+							"    access,",
+							"    refresh,",
+							"} = pm.response.json();",
+							"",
+							"pm.collectionVariables.set(`${email} |access`, access);",
+							"pm.collectionVariables.set(`${email} |refresh`, refresh);",
+							"",
+							"pm.collectionVariables.set(`/auth/refresh |access`, access);",
+							"pm.collectionVariables.set(`/auth/refresh |refresh`, refresh);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"refresh\": \"Bearer {{/auth/login |refresh}}\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}:{{chatik-auth port}}/auth/refresh",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{chatik-auth port}}",
+					"path": [
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost",
+			"type": "string"
+		},
+		{
+			"key": "chatik-auth port",
+			"value": "3000",
+			"type": "string"
+		},
+		{
+			"key": "Martin.Carroll81@gmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Martin.Carroll81@gmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Annamarie12@yahoo.com |email",
+			"value": ""
+		},
+		{
+			"key": "Annamarie12@yahoo.com |password",
+			"value": ""
+		},
+		{
+			"key": "/auth/register |email",
+			"value": ""
+		},
+		{
+			"key": "/auth/register |password",
+			"value": ""
+		},
+		{
+			"key": "Henry92@hotmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Henry92@hotmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Lawrence_McClure62@yahoo.com |email",
+			"value": ""
+		},
+		{
+			"key": "Lawrence_McClure62@yahoo.com |password",
+			"value": ""
+		},
+		{
+			"key": "Leora73@yahoo.com |email",
+			"value": ""
+		},
+		{
+			"key": "Leora73@yahoo.com |password",
+			"value": ""
+		},
+		{
+			"key": "Kyler_King74@hotmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Kyler_King74@hotmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Jadon_Watsica@yahoo.com |email",
+			"value": ""
+		},
+		{
+			"key": "Jadon_Watsica@yahoo.com |password",
+			"value": ""
+		},
+		{
+			"key": "Pierre.Goldner@yahoo.com |email",
+			"value": ""
+		},
+		{
+			"key": "Pierre.Goldner@yahoo.com |password",
+			"value": ""
+		},
+		{
+			"key": "Derek.Kulas@gmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Derek.Kulas@gmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Jacky.Koelpin43@gmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Jacky.Koelpin43@gmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Jerod.Larkin@gmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Jerod.Larkin@gmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Beau_Beer@gmail.com |email",
+			"value": ""
+		},
+		{
+			"key": "Beau_Beer@gmail.com |password",
+			"value": ""
+		},
+		{
+			"key": "Beau_Beer@gmail.com |access",
+			"value": ""
+		},
+		{
+			"key": "Beau_Beer@gmail.com |refresh",
+			"value": ""
+		},
+		{
+			"key": "/auth/login |access",
+			"value": ""
+		},
+		{
+			"key": "/auth/login |refresh",
+			"value": ""
+		},
+		{
+			"key": "undefined |access",
+			"value": ""
+		},
+		{
+			"key": "undefined |refresh",
+			"value": ""
+		},
+		{
+			"key": "/auth/refresh |access",
+			"value": ""
+		},
+		{
+			"key": "/auth/refresh |refresh",
+			"value": ""
+		}
+	]
+}
