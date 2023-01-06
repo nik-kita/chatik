@@ -1,4 +1,4 @@
-import req from 'supertest';
+import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 
 // TODO move to fixtures

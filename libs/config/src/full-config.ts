@@ -2,7 +2,8 @@ import { Transform } from 'class-transformer';
 import { IsIn, IsInt, IsString, Max, Min } from 'class-validator';
 
 const NodeEnvs = ['prod', 'dev', 'test'] as const;
-type NodeEnv = typeof NodeEnvs[number];
+
+export type NodeEnv = typeof NodeEnvs[number];
 
 export class FullConfig {
   @IsIn(NodeEnvs)

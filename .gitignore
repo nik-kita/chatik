@@ -1,5 +1,6 @@
 .env
 .test.env
+.dev.env
 
 
 # compiled output
