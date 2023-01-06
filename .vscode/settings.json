@@ -4,6 +4,7 @@
     "citext",
     "dtos",
     "nestjs",
-    "typeorm"
+    "typeorm",
+    "websockets"
   ]
 }

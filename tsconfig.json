@@ -38,6 +38,9 @@
       ],
       "@app/types": [
         "libs/types/src"
+      ],
+      "@app/decorators": [
+        "libs/decorators/src"
       ]
     }
   }
