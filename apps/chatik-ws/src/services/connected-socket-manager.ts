@@ -22,7 +22,7 @@ export class ConnectedSocketManager {
     return this.clientByUserIdMap.get(userId);
   }
 
-  getBeWs(ws: WebSocket) {
+  getByWs(ws: WebSocket) {
     return this.clientByWsMap.get(ws);
   }
 
