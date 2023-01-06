@@ -2,7 +2,7 @@ import { Logger } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
 import { SubMessage } from '../../../../libs/decorators/src';
-import { IMessageGateway } from '../../../../libs/types/src';
+import { IMessageGateway, MessageGatewayEvent } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { SendMessageSubDto } from '../sub-dtos/send-message.sub-dto';
 import { ConnectionsGateway } from './connections.gateway';
@@ -28,7 +28,7 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGatew
   }
 
   @SubMessage()
-  ['on-send-message'](
+  [MessageGatewayEvent.SEND_MESSAGE](
     @MessageBody() body: SendMessageSubDto,
     @ConnectedSocket() ws: WebSocket,
   ) {

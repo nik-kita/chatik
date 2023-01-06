@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
-
+import * as EventEmitter from 'events';
+import { MessageGatewayEvent } from '../../../../libs/types/src/ws'
 
 // TODO move to fixtures
 const ws = {
@@ -26,9 +28,13 @@ const A = {
   access: '',
   refresh: '',
 };
+const label = {
+  message: 'message',
+}
 
 describe('MVP', () => {
-  const clients: WebSocket[] = [];
+  const clients = new WeakMap<object, WebSocket>();
+  const wsClientDebugger = new EventEmitter();
 
   it('Should register new user', async () => {
     const { body: bodyRegister } = await req(auth.host)
@@ -62,23 +68,55 @@ describe('MVP', () => {
           Authorization: `Bearer ${A.access}`,
         },
       }).on('message', (data) => {
-        console.log(data);
-        resolve();
+        wsClientDebugger.emit(label.message, data);
       }).on('open', () => {
-        console.log('open');
+        expect('should').not.toBe('problem');
         resolve();
-      }).on('error', reject);
+      }).on('error', (error) => {
+        expect('not').toBe('here');
+        reject(error);
+      });
 
-      clients.push(client);
+      clients.set(A, client);
     });
-
   });
 
-  afterAll(async () => {
-    clients.forEach((c) => {
-      const { readyState, OPEN, CONNECTING } = c;
+  it('Should send message', async () => {
+    const client = clients.get(A);
 
-      if (([OPEN, CONNECTING] as number[]).includes(readyState)) c.close();
+    expect(client).toBeInstanceOf(WebSocket);
+
+    if (!client) return;
+
+    await new Promise<void>((resolve, reject) => {
+      // const offTimeout = setTimeout(() => {
+      //   expect('should').not.toBe('wait so long for message');
+      //   reject();
+      // }, 3_000);
+
+      // wsClientDebugger.on(label.message, (...args: any[]) => {
+      //   args.forEach((a) => console.log(a));
+      //   clearTimeout(offTimeout);
+      //   resolve();
+      // });
+      client.send(MessageGatewayEvent.SEND_MESSAGE, (error) => {
+        expect(error).not.toBeDefined();
+
+        if (error) reject(error);
+        else resolve();
+      });
+    });
+  }, 10_000);
+
+  afterAll(async () => {
+    [A].forEach((u) => {
+      const wsClient = clients.get(u);
+
+      if (!wsClient) return;
+
+      const { readyState, OPEN, CONNECTING } = wsClient;
+
+      if (([OPEN, CONNECTING] as number[]).includes(readyState)) wsClient.close();
     })
   });
 });
