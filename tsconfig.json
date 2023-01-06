@@ -21,6 +21,9 @@
       "@app/config/chatik": [
         "libs/config/src/chatik"
       ],
+      "@app/config/chatik-ws": [
+        "libs/config/src/chatik-ws"
+      ],
       "@app/config/common": [
         "libs/config/src/common"
       ],

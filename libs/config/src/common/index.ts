@@ -1,1 +1,1 @@
-export type { PgEntitiesEnv } from './pg-db-env';
+export type { PgDbEnv as PgEntitiesEnv } from './pg-db-env';

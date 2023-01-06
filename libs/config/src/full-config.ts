@@ -36,6 +36,12 @@ export class FullConfig {
   @Max(9999)
   AUTH_PORT = 3000;
 
+  @Transform(({ value }) => +value)
+  @IsInt()
+  @Min(3000)
+  @Max(9999)
+  WS_PORT = 4444;
+
   @IsString()
   JWT_ACCESS_SECRET: string;
 
