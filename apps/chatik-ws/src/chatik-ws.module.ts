@@ -1,6 +1,6 @@
 import { ChatikWsConfigModule, ChatikWsEnv } from '@app/config/chatik-ws';
 import { Module } from '@nestjs/common';
-import { PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
+import { MessageEntity, MessagePgRepo, PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConnectionsGateway } from './gateways/connections.gateway';
 import { JwtModule } from '@nestjs/jwt';
@@ -12,7 +12,7 @@ import { ConnectedSocketManager } from './services/connected-socket-mannager';
   imports: [
     ChatikWsConfigModule,
     PgDbModule,
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity, MessageEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory(config: ConfigService<ChatikWsEnv>) {
@@ -30,6 +30,7 @@ import { ConnectedSocketManager } from './services/connected-socket-mannager';
     OnlyAuthHandleConnectionService,
     ConnectedSocketManager,
     UserPgRepo,
+    MessagePgRepo,
   ],
 })
 export class ChatikWsModule { }

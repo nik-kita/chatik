@@ -16,5 +16,10 @@
       "path": "../apps/chatik-auth/src",
       "name": "chatik-auth",
     },
-  ]
+  ],
+  "settings": {
+    "cSpell.words": [
+      "Chatik"
+    ]
+  }
 }

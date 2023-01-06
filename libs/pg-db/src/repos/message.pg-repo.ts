@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 export class MessagePgRepo extends PgRepo<MessageEntity, 'message_id'> {
-  protected constructor(
+  constructor(
     @InjectRepository(MessageEntity)
     protected repo: Repository<MessageEntity>,
   ) {
