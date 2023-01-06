@@ -9,6 +9,7 @@ import {
 import { Server, WebSocket } from 'ws';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
+import { JwtAccessPayload } from '../../../../libs/types/src';
 
 
 @WebSocketGateway({ path: '/connecting' })
@@ -28,16 +29,26 @@ export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, O
     this.logger.debug('.afterInit()');
   }
 
+  // TODO find way to replace this logic to WsExceptionFilter
   async handleConnection(client: WebSocket, firstArg = {}) {
-    const payload = await this.onlyAuthGuard.verifyUserFromBearer(firstArg);
+    let jwtError: Error | null = null;
+    let payload: JwtAccessPayload | null = null;
 
-    // TODO find way to replace this logic with WsException, WsExceptionFilter
-    if (!payload) {
+    // TODO check jwt error codes, define exceptions
+    try {
+      payload = await this.onlyAuthGuard.verifyUserFromBearer(firstArg);
+    } catch (error) {
+      jwtError = error;
+    }
+
+    if (jwtError || !payload) {
       const ERR_CODE = 4003;
       const errorData = JSON.stringify({
         error: 'Unauthorized',
         code: ERR_CODE,
-        reason: 'Ws client should have /Authorization/ header with Bearer access token',
+        reason: jwtError
+          ? String(jwtError)
+          : 'Ws client should have /Authorization/ header with Bearer access token',
       });
       client.send(errorData);
       client.close(ERR_CODE, errorData);
