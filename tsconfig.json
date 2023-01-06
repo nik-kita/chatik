@@ -35,6 +35,12 @@
       ],
       "@app/req-dtos/chatik-auth": [
         "libs/req-dtos/src/chatik-auth"
+      ],
+      "@app/types": [
+        "libs/types/src"
+      ],
+      "@app/types/*": [
+        "libs/types/src/*"
       ]
     }
   }

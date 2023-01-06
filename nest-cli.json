@@ -63,6 +63,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/req-dtos/tsconfig.lib.json"
       }
+    },
+    "types": {
+      "type": "library",
+      "root": "libs/types",
+      "entryFile": "index",
+      "sourceRoot": "libs/types/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/types/tsconfig.lib.json"
+      }
     }
   }
 }
