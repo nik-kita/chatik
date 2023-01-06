@@ -6,6 +6,7 @@ export class ChatikWsEnv extends IntersectionType(
   PickType(FullConfig, [
     'NODE_ENV',
     'WS_PORT',
+    'JWT_ACCESS_SECRET',
   ]),
   PgDbEnv,
 ) { }
