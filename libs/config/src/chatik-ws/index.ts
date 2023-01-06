@@ -1,2 +1,2 @@
-export { ChatikWsConfigModule as ChatikConfigModule } from './chatik-ws-config.module';
-export type { ChatikWsEnv as ChatikEnv } from './chatik-ws-env';
+export { ChatikWsConfigModule } from './chatik-ws-config.module';
+export type { ChatikWsEnv } from './chatik-ws-env';
