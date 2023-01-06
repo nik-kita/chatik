@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
 import { SubMessage } from '../../../../libs/decorators/src';
 import { IMessageGateway } from '../../../../libs/types/src';
@@ -20,6 +20,11 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGatew
       connectedSocketManager,
       new Logger(MessagesGateway.name),
     );
+  }
+
+  @SubscribeMessage('*')
+  all(...args: any[]) {
+    args.forEach((a) => console.log(a));
   }
 
   @SubMessage()

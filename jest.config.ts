@@ -31,7 +31,7 @@ export default async (): Promise<Config.InitialOptions> => {
     moduleNameMapper: Object.entries(paths).reduce((acc, [alias, p]) => {
       (acc as any)[alias] = Array.isArray(p)
         ? p.map((_p) => `<rootDir>/${_p}`)
-        :`<rootDir>/${p}`;
+        : `<rootDir>/${p}`;
 
       return acc;
     }, {} as Record<string, string>),
@@ -40,6 +40,7 @@ export default async (): Promise<Config.InitialOptions> => {
     detectLeaks: true,
     projects: [
       '<rootDir>/apps/chatik/test/jest.config.ts',
+      '<rootDir>/apps/chatik-ws/test/jest.config.ts',
       '<rootDir>/libs/config/test/jest.config.ts',
     ],
   };
