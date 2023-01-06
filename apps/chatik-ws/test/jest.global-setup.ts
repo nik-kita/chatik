@@ -1,24 +1,25 @@
 import { config } from 'dotenv';
 import { join } from 'path';
-/**
- * Here, as example, you can see
- * commented setup
- * database for tests.
- */
-// import { Client } from 'pg';
+import { DataSource } from 'typeorm';
 
 config({ path: join(__dirname, '.test.env') });
 
 export default async () => {
-    // const client = new Client({
-    //     host: process.env.TEST_PG_HOST,
-    //     user: process.env.TEST_PG_USER,
-    //     password: process.env.TEST_PG_PASSWORD,
-    // });
+    const dSource = new DataSource({
+        type: 'postgres',
+        host: process.env.TEST_PG_HOST,
+        username: process.env.TEST_PG_USER,
+        password: process.env.TEST_PG_PASSWORD,
+        migrations: [join(process.cwd()), 'pg-migrations', 'migrations/*'],
+        migrationsRun: true,
+    });
 
-    // await client.connect();
-    // await client.query(`DROP DATABASE IF EXISTS "${process.env.TEST_PG_DB}" WITH (FORCE)`);
-    // await client.query(`CREATE DATABASE "${process.env.TEST_PG_DB}"`);
-
-    // await client.end();
+    await dSource.runMigrations();
+    await dSource.initialize();
+    /**
+     * PLEASE, DON'T DROP PRODUCTION ! ! ! :D
+     */
+    await dSource.query(`DROP DATABASE IF EXISTS "${process.env.TEST_PG_DB_NAME}" WITH (FORCE)`);
+    await dSource.query(`CREATE DATABASE "${process.env.TEST_PG_DB_NAME}"`);
+    await dSource.destroy();
 };
