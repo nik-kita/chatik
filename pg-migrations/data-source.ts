@@ -3,10 +3,20 @@ import { config } from 'dotenv';
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { configValidate } from '../libs/config/src/config-validate';
-import { FullConfig } from '../libs/config/src/full-config';
+import { FullConfig, NodeEnv } from '../libs/config/src/full-config';
 import { join } from 'path';
 
 config();
+config({ path: '.default.env' });
+
+const envFile = ({
+  prod: '',
+  dev: '.dev',
+  test: '.test',
+} satisfies Record<NodeEnv, string>)[process.env.NODE_ENV || 'test'];
+
+config({ path: `${envFile}.env` });
+
 
 class DataSourceEnv extends PickType(FullConfig, [
   'NODE_ENV',
