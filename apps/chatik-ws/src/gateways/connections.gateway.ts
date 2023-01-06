@@ -1,5 +1,4 @@
 import { Logger } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -9,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
+import { ConnectedSocketManager } from '../services/connected-socket-mannager';
 
 
 @WebSocketGateway({ path: '/connecting' })
@@ -16,6 +16,7 @@ export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, O
 
   constructor(
     private onlyAuthGuard: OnlyAuthHandleConnectionService,
+    private connectedSocketManager: ConnectedSocketManager,
   ) { }
 
   @WebSocketServer()
@@ -34,16 +35,22 @@ export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, O
     if (!payload) {
       client.close(4003, JSON.stringify({
         reason: 'Ws client should have /Authorization/ header with Bearer access token',
-      }, null, 4));
+      }));
 
       return;
     }
 
+    this.connectedSocketManager.insert(payload.user_id, client);
+    this.logger.debug({
+      event: 'client is connected',
+      user_id: payload.user_id,
+    });
   }
 
   handleDisconnect(client: any) {
-    this.logger.debug(JSON.stringify({
+    this.logger.debug({
       event: 'client is disconnected',
-    }, null, 4));
+      user_id: this.connectedSocketManager.rmByWs(client),
+    });
   }
 }

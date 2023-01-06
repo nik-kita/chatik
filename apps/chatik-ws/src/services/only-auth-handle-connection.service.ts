@@ -21,7 +21,7 @@ export class OnlyAuthHandleConnectionService {
     if (headers && headers.Authorization) {
       const payload = await this.jwt.verify(String(headers.Authorization.split('Bearer ').at(1)));
 
-      return payload;
+      return payload as { user_id: string }; // TODO
     }
 
     return null;
