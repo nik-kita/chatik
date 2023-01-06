@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "..",
+      "name": "_cwd"
+    },
+    {
+      "path": "../apps/chatik-ws/src",
+      "name": "chatik-ws",
+    },
+    {
+      "path": "../apps/chatik/src",
+      "name": "chatik",
+    },
+    {
+      "path": "../apps/chatik-auth/src",
+      "name": "chatik-auth",
+    },
+  ]
+}
