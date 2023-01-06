@@ -89,24 +89,28 @@ describe('MVP', () => {
     if (!client) return;
 
     await new Promise<void>((resolve, reject) => {
-      // const offTimeout = setTimeout(() => {
-      //   expect('should').not.toBe('wait so long for message');
-      //   reject();
-      // }, 3_000);
+      const off = setTimeout(() => {
+        expect('not').toBe('here');
+        reject();
+      }, 2_000);
 
-      // wsClientDebugger.on(label.message, (...args: any[]) => {
-      //   args.forEach((a) => console.log(a));
-      //   clearTimeout(offTimeout);
-      //   resolve();
-      // });
-      client.send(MessageGatewayEvent.SEND_MESSAGE, (error) => {
-        expect(error).not.toBeDefined();
-
-        if (error) reject(error);
-        else resolve();
+      wsClientDebugger.on(label.message, (data) => {
+        clearTimeout(off);
+        expect(data).toBeDefined();
+        resolve();
       });
+
+      client.send(JSON.stringify({
+        event: MessageGatewayEvent.SEND_MESSAGE,
+        data: {
+          text: `\
+Hi! ${faker.name.firstName()}! How are You? \
+I know cool song - "${faker.music.songName()}"!\
+`,
+        },
+      }));
     });
-  }, 10_000);
+  });
 
   afterAll(async () => {
     [A].forEach((u) => {
