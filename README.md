@@ -1,73 +1,46 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# TODO complete this readme
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### General info:
+* The application is a composite from 3 projects:
+    1. `chatik` (the main app, but for now it is approximately empty)
+    2. `chatik-auth` (separate microservice for control all flows related to authentication/authorization logic)
+    3. `chatik-ws` (messaging app)
+* Websockets are constructed for working only with authenticated users:
+    * the auth jobs, logic are delegated to `chatik-auth` microservice
+    * jwt-access token is verified during connection
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+### Setup details:
+* Project is related from:
+    * postgres
+    * ws
+    * ...
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ pnpm install
-```
-
-## Running the app
-
-```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+* `pnpm` node package manager is used for this project
+* Config logic:
+    1. `.env` file should contain `NODE_ENV` with `test` or `dev` or `prod` values
+    2. otherwise `NODE_ENV=test` from `.default.env` will be used
+    3. all other environments are retrieved from `.***.env` file where `***` value from 1 and 2 articles
+* Scripts:
+    * optional:
+        * `npm i -g pnpm`
+    * install dependencies:
+        * `pnpm i`
+    * run migrations:
+        * `npm run pg-migrations:cli` (custom cli was written)
+    * run `chatik` app:
+        * `npm run start:dev chatik`
+    * run `chatik-auth` app:
+        * `npm run start:dev chatik-auth`
+    * run `chatik-ws` app:
+        * `npm run start:dev chatik-ws`
+    > other run types instead `start:dev` is not actual for current developing state of project
+* Tests:
+    * tests has their own `.test.env` for complicated tests with `setup-global.jest.ts` settings
+    * run all tests:
+        * `npm run test:all`
+    * run for specific app:
+        * `npm run test apps/chatik-ws` and etc.
+    * run for specific lib:
+        * `npm run test libs/config` and etc.
+    > For now the test coverage is very weak... so command may have errors(
