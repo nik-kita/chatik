@@ -16,7 +16,11 @@ import { LocalStrategy } from './strategies/local/local.strategy';
     PassportModule,
     JwtModule,
   ],
-  providers: [ChatikAuthService, UserPgRepo, LocalStrategy],
+  providers: [
+    ChatikAuthService,
+    UserPgRepo,
+    LocalStrategy,
+  ],
   controllers: [ChatikAuthController],
 })
 export class ChatikAuthModule {}

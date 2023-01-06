@@ -1,6 +1,8 @@
 import { UserEntity, UserPgRepo } from '@app/pg-db';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { ChatikAuthEnv } from '../../../libs/config/src/chatik-auth';
 
 
 @Injectable()
@@ -8,6 +10,7 @@ export class ChatikAuthService {
   constructor(
     private readonly userRepo: UserPgRepo,
     private readonly jwt: JwtService,
+    private readonly config: ConfigService<ChatikAuthEnv>,
   ) { }
 
   async register(data: {
@@ -20,11 +23,23 @@ export class ChatikAuthService {
   }
 
   async login(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+    const [access, refresh] = await Promise.all([
+      this.jwt.signAsync(userJwtPayload, {
+        secret: this.config.get('JWT_ACCESS_SECRET'),
+        expiresIn: '1m',
+      }),
+      this.jwt.signAsync(userJwtPayload, {
+        secret: this.config.get('JWT_REFRESH_SECRET'),
+        expiresIn: '3d',
+      }),
+    ]);
+
     return {
-      access: await this.jwt.signAsync(userJwtPayload),
-      refresh: await this.jwt.signAsync(userJwtPayload),
+      access,
+      refresh,
     };
   }
+
 
   async validateUser(data: {
     email: string,
