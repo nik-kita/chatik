@@ -1,12 +1,12 @@
 import { ChatikWsConfigModule, ChatikWsEnv } from '@app/config/chatik-ws';
-import { Module } from '@nestjs/common';
 import { MessageEntity, MessagePgRepo, PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConnectionsGateway } from './gateways/connections.gateway';
-import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MessagesGateway } from './gateways/messages.gateway';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
+import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { ConnectedSocketManager } from './services/connected-socket-manager';
     }),
   ],
   providers: [
-    ConnectionsGateway,
+    MessagesGateway,
     OnlyAuthHandleConnectionService,
     ConnectedSocketManager,
     UserPgRepo,

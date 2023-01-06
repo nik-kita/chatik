@@ -3,27 +3,25 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
-  WebSocketGateway,
-  WebSocketServer,
+  WebSocketServer
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
-import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { JwtAccessPayload } from '../../../../libs/types/src';
+import { ConnectedSocketManager } from '../services/connected-socket-manager';
+import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 
 
-@WebSocketGateway({ path: '/connecting' })
-export class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+
+export abstract class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
-    private onlyAuthGuard: OnlyAuthHandleConnectionService,
-    private connectedSocketManager: ConnectedSocketManager,
+    protected onlyAuthGuard: OnlyAuthHandleConnectionService,
+    protected connectedSocketManager: ConnectedSocketManager,
+    protected logger: Logger,
   ) { }
 
   @WebSocketServer()
   server: Server;
-
-  private logger = new Logger(ConnectionsGateway.name);
 
   afterInit() {
     this.logger.debug('.afterInit()');
