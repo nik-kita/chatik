@@ -35,4 +35,10 @@ export class FullConfig {
   @Min(3000)
   @Max(9999)
   AUTH_PORT = 3000;
+
+  @IsString()
+  JWT_ACCESS_SECRET: string;
+
+  @IsString()
+  JWT_REFRESH_SECRET: string;
 }

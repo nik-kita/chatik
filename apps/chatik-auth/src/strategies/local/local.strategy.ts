@@ -3,10 +3,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { ChatikAuthService } from '../../chatik-auth.service';
 import { UserEntity } from '@app/pg-db';
+import { LOCAL_STRATEGY_NAME } from '../strategy-names.const';
 
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, LOCAL_STRATEGY_NAME) {
   constructor(private authService: ChatikAuthService) {
     super({
       usernameField: 'email' satisfies keyof UserEntity,

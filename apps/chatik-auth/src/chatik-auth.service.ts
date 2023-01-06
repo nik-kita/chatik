@@ -1,9 +1,14 @@
-import { UserPgRepo } from '@app/pg-db';
+import { UserEntity, UserPgRepo } from '@app/pg-db';
 import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
 
 @Injectable()
 export class ChatikAuthService {
-  constructor(private readonly userRepo: UserPgRepo) { }
+  constructor(
+    private readonly userRepo: UserPgRepo,
+    private readonly jwt: JwtService,
+  ) { }
 
   async register(data: {
     email: string,
@@ -12,6 +17,13 @@ export class ChatikAuthService {
     const insertRes = await this.userRepo.insert(data);
 
     return insertRes;
+  }
+
+  async login(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+    return {
+      access: await this.jwt.signAsync(userJwtPayload),
+      refresh: await this.jwt.signAsync(userJwtPayload),
+    };
   }
 
   async validateUser(data: {
