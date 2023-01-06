@@ -5,7 +5,7 @@ import { ChatikAuthConfigModule } from '@app/config/chatik-auth';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './strategies/local.strategy';
+import { LocalStrategy } from './strategies/local/local.strategy';
 
 @Module({
   imports: [

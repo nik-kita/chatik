@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { ChatikAuthService } from './chatik-auth.service';
 import { RegisterReqDto, LoginReqDto } from '@app/req-dtos/chatik-auth';
 import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from './strategies/local/local.guard';
 
 @Controller('auth')
 export class ChatikAuthController {
@@ -16,7 +17,7 @@ export class ChatikAuthController {
     return this.chatikAuthService.register(body);
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   login(
     // TODO wrap to separate decorator, add types, etc.

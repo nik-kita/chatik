@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { ChatikAuthService } from '../chatik-auth.service';
+import { ChatikAuthService } from '../../chatik-auth.service';
 import { UserEntity } from '@app/pg-db';
 
 
