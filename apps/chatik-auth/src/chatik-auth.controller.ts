@@ -31,7 +31,7 @@ export class ChatikAuthController {
   refresh(
     @Request() req,
   ) {
-    return req.user;
+    return this.chatikAuthService.refresh(req.user);
   }
 
   @Get()

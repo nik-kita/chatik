@@ -22,7 +22,7 @@ export class ChatikAuthService {
     return insertRes;
   }
 
-  async login(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+  private async generateJwtTokensPair(userJwtPayload: Pick<UserEntity, 'user_id'>) {
     const [access, refresh] = await Promise.all([
       this.jwt.signAsync(userJwtPayload, {
         secret: this.config.get('JWT_ACCESS_SECRET'),
@@ -40,6 +40,13 @@ export class ChatikAuthService {
     };
   }
 
+  async login(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+    return this.generateJwtTokensPair(userJwtPayload);
+  }
+
+  async refresh(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+    return this.generateJwtTokensPair(userJwtPayload);
+  }
 
   async validateUser(data: {
     email: string,

@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatikAuthController } from './chatik-auth.controller';
 import { ChatikAuthService } from './chatik-auth.service';
 import { LocalStrategy } from './strategies/local/local.strategy';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { LocalStrategy } from './strategies/local/local.strategy';
     ChatikAuthService,
     UserPgRepo,
     LocalStrategy,
+    JwtRefreshStrategy,
   ],
   controllers: [ChatikAuthController],
 })
