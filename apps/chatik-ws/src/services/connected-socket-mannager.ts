@@ -1,20 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocket } from 'ws';
+import { WsAuthClient } from '../../../../libs/types/src';
 
-
-// TODO mv to types
-type Client = {
-  userId: string,
-  ws: WebSocket,
-};
 
 @Injectable()
 export class ConnectedSocketManager {
-  private clientByUserIdMap = new Map<string, Client>();
-  private clientByWsMap = new WeakMap<WebSocket, Client>();
+  private clientByUserIdMap = new Map<string, WsAuthClient>();
+  private clientByWsMap = new WeakMap<WebSocket, WsAuthClient>();
 
   insert(userId: string, ws: WebSocket) {
-    const client: Client = {
+    const client: WsAuthClient = {
       userId,
       ws,
     };
@@ -55,7 +50,7 @@ export class ConnectedSocketManager {
     return null;
   }
 
-  private rm(client: Client) {
+  private rm(client: WsAuthClient) {
     this.clientByUserIdMap.delete(client.userId);
     this.clientByWsMap.delete(client.ws);
   }

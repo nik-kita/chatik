@@ -5,6 +5,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
 import { JWT_REFRESH_STRATEGY_NAME } from '../strategy-names.const';
+import { JwtRefreshPayload } from '../../../../../libs/types/src';
 
 
 @Injectable()
@@ -19,8 +20,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, JWT_REFRESH_S
     });
   }
 
-  // TODO add payload's type of jwt access
-  async validate(payload: any) {
+  async validate(payload: JwtRefreshPayload) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { user_id, ..._ } = payload;
 

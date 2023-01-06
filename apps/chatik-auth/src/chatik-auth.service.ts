@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ChatikAuthEnv } from '../../../libs/config/src/chatik-auth';
+import { JwtAccessPayload, JwtRefreshPayload } from '../../../libs/types/src';
 
 
 @Injectable()
@@ -40,11 +41,11 @@ export class ChatikAuthService {
     };
   }
 
-  async login(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+  async login(userJwtPayload: JwtAccessPayload) {
     return this.generateJwtTokensPair(userJwtPayload);
   }
 
-  async refresh(userJwtPayload: Pick<UserEntity, 'user_id'>) {
+  async refresh(userJwtPayload: JwtRefreshPayload) {
     return this.generateJwtTokensPair(userJwtPayload);
   }
 

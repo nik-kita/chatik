@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAccessPayload } from '../../../../libs/types/src';
 
 @Injectable()
 export class OnlyAuthHandleConnectionService {
@@ -19,9 +20,10 @@ export class OnlyAuthHandleConnectionService {
       }, {} as { Authorization?: string });
 
     if (headers && headers.Authorization) {
-      const payload = await this.jwt.verify(String(headers.Authorization.split('Bearer ').at(1)));
+      const token = headers.Authorization.split('Bearer ').at(1);
+      const payload = await this.jwt.verify(String(token)) as JwtAccessPayload;
 
-      return payload as { user_id: string }; // TODO
+      return payload;
     }
 
     return null;

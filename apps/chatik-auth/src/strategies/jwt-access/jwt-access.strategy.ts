@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ChatikAuthEnv } from '@app/config/chatik-auth';
 import { JWT_ACCESS_STRATEGY_NAME } from '../strategy-names.const';
 import { Injectable } from '@nestjs/common';
+import { JwtAccessPayload } from '../../../../../libs/types/src';
 
 
 @Injectable()
@@ -18,8 +19,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, JWT_ACCESS_STR
     });
   }
 
-  // TODO add payload's type of jwt access
-  async validate(payload: any) {
+  async validate(payload: JwtAccessPayload) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { user_id, ..._ } = payload;
 
