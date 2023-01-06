@@ -21,7 +21,8 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "ws": "^8.11.0"
   },
   "devDependencies": {
     "@jest/types": "^29.3.1",
@@ -30,6 +31,7 @@
     "@nestjs/jwt": "^10.0.1",
     "@nestjs/mapped-types": "^1.2.0",
     "@nestjs/passport": "^9.0.0",
+    "@nestjs/platform-ws": "^9.2.1",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.2.1",
     "@nestjs/typeorm": "^9.0.1",
@@ -41,6 +43,7 @@
     "@types/passport-jwt": "^3.0.8",
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.11",
+    "@types/ws": "^8.5.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "class-transformer": "^0.5.1",

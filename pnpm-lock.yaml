@@ -10,6 +10,7 @@ specifiers:
   '@nestjs/mapped-types': ^1.2.0
   '@nestjs/passport': ^9.0.0
   '@nestjs/platform-express': ^9.0.0
+  '@nestjs/platform-ws': ^9.2.1
   '@nestjs/schematics': ^9.0.0
   '@nestjs/testing': ^9.2.1
   '@nestjs/typeorm': ^9.0.1
@@ -21,6 +22,7 @@ specifiers:
   '@types/passport-jwt': ^3.0.8
   '@types/passport-local': ^1.0.34
   '@types/supertest': ^2.0.11
+  '@types/ws': ^8.5.4
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.0.0
   class-transformer: ^0.5.1
@@ -44,6 +46,7 @@ specifiers:
   tsconfig-paths: 4.1.1
   typeorm: ^0.3.11
   typescript: ^4.7.4
+  ws: ^8.11.0
 
 dependencies:
   '@nestjs/common': 9.2.1_welcnyot5bzd5wa2aovbkxpi4i
@@ -51,6 +54,7 @@ dependencies:
   '@nestjs/platform-express': 9.2.1_hjcqpoaebdr7gdo5hgc22hthbe
   reflect-metadata: 0.1.13
   rxjs: 7.8.0
+  ws: 8.11.0
 
 devDependencies:
   '@jest/types': 29.3.1
@@ -59,6 +63,7 @@ devDependencies:
   '@nestjs/jwt': 10.0.1_@nestjs+common@9.2.1
   '@nestjs/mapped-types': 1.2.0_ejjx6q7ue32bc24a7sespjpcyu
   '@nestjs/passport': 9.0.0_6o47igfla2pj7yzh7agpvpttka
+  '@nestjs/platform-ws': 9.2.1_75thavexiqyxpvcxom3j44gxby
   '@nestjs/schematics': 9.0.4_typescript@4.9.4
   '@nestjs/testing': 9.2.1_wdbvfsxfdwzlwdfiyh2gynjl4m
   '@nestjs/typeorm': 9.0.1_hkapd3a3mi37wyf4vtt5y4i2ye
@@ -70,6 +75,7 @@ devDependencies:
   '@types/passport-jwt': 3.0.8
   '@types/passport-local': 1.0.34
   '@types/supertest': 2.0.12
+  '@types/ws': 8.5.4
   '@typescript-eslint/eslint-plugin': 5.48.0_k73wpmdolxikpyqun3p36akaaq
   '@typescript-eslint/parser': 5.48.0_iukboom6ndih5an6iafl45j2fe
   class-transformer: 0.5.1
@@ -1003,6 +1009,23 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
+  /@nestjs/platform-ws/9.2.1_75thavexiqyxpvcxom3j44gxby:
+    resolution: {integrity: sha512-jk/3xljEPbPGXU8PXiRrXcTrXU2dXXEMaUoREyCPy09VPxXVYcGfvpz4u1oYMd9+uPGrMf7DQlO0xO2WDMWp7w==}
+    peerDependencies:
+      '@nestjs/common': ^9.0.0
+      '@nestjs/websockets': ^9.0.0
+      rxjs: ^7.1.0
+    dependencies:
+      '@nestjs/common': 9.2.1_welcnyot5bzd5wa2aovbkxpi4i
+      '@nestjs/websockets': 9.2.1_fyic65utxiftcghm7bf7rrj4z4
+      rxjs: 7.8.0
+      tslib: 2.4.1
+      ws: 8.11.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: true
+
   /@nestjs/schematics/9.0.4_bpd7edbl7imd2lxcmdt57tn7ne:
     resolution: {integrity: sha512-egurCfAc4e5i1r2TmeAF0UrOKejFmT5oTdv4b7HcOVPupc3QGU7CbEfGleL3mkM5AjrixTQeMxU9bJ00ttAbGg==}
     peerDependencies:
@@ -1373,6 +1396,12 @@ packages:
 
   /@types/validator/13.7.10:
     resolution: {integrity: sha512-t1yxFAR2n0+VO6hd/FJ9F2uezAZVWHLmpmlJzm1eX03+H7+HsuTAp7L8QJs+2pQCfWkP1+EXsGK9Z9v7o/qPVQ==}
+
+  /@types/ws/8.5.4:
+    resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
+    dependencies:
+      '@types/node': 18.11.18
+    dev: true
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
@@ -5353,6 +5382,18 @@ packages:
       imurmurhash: 0.1.4
       signal-exit: 3.0.7
     dev: true
+
+  /ws/8.11.0:
+    resolution: {integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
 
   /xml2js/0.4.23:
     resolution: {integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==}
