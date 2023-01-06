@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { ConnectedSocketManager } from '../services/connected-socket-mannager';
+import { ConnectedSocketManager } from '../services/connected-socket-manager';
 
 
 @WebSocketGateway({ path: '/connecting' })

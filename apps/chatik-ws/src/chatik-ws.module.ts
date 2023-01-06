@@ -6,7 +6,7 @@ import { ConnectionsGateway } from './gateways/connections.gateway';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
-import { ConnectedSocketManager } from './services/connected-socket-mannager';
+import { ConnectedSocketManager } from './services/connected-socket-manager';
 
 @Module({
   imports: [
