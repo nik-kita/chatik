@@ -8,8 +8,11 @@ export class SendMessagePubDto implements Pick<SendMessageSubDto, 'text'> {
 
   static send(sender: WsAuthClient, text: string) {
     return JSON.stringify({
-      from: sender.userId,
-      text,
+      event: 'SendMessagePub', // TODO declare types (enum)
+      data: {
+        from: sender.userId,
+        text,
+      },
     });
   }
 }

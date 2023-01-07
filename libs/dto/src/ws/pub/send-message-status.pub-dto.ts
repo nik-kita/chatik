@@ -5,7 +5,10 @@ export class SendMessageStatusPubDto {
 
   public static send(status: StatusForSender) {
     return JSON.stringify({
-      sendedMessageStatus: status,
+      event: 'SendMessageStatusPub',
+      data: {
+        sendedMessageStatus: status,
+      },
     });
   }
 }
