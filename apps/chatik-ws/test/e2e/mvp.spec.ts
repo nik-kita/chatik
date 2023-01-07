@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
 import { MessageGateEvent } from '../../../../libs/types/src/ws'
+import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
 
 // TODO move to fixtures
 const ws = {
@@ -22,53 +23,66 @@ const app = {
   host: `http://localhost:${process.env.TEST_CHATIK_PORT}`,
 };
 
-const A = {
+const [A, B] = Array.from({ length: 2 }).map(() => ({
   email: faker.internet.email(),
   password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
   access: '',
   refresh: '',
-};
-const label = {
-  message: 'message',
-}
+  user_id: '',
+  label: '',
+}));
+const userDataProvider = [A, B].map((user) => ({ email: user.email, label: user.email, user }));
 
 describe('MVP', () => {
   const clients = new WeakMap<object, WebSocket>();
   const wsClientDebugger = new EventEmitter();
 
-  it('Should register new user', async () => {
+  it.each(userDataProvider)('Should register user with /$email/ email', async ({ user }) => {
+    const registerDto: RegisterReqDto = {
+      email: user.email,
+      password: user.password,
+    };
     const { body: bodyRegister } = await req(auth.host)
       .post(auth.POST['/auth/register'])
-      .send(A)
+      .send(registerDto)
       .expect(201);
 
     expect(bodyRegister).toBeInstanceOf(Object);
+  });
 
+  it.each(userDataProvider)('Should login as /$email/ user', async ({ user }) => {
     const { body: bodyLogin } = await req(auth.host)
       .post(auth.POST['/auth/login'])
-      .send(A)
+      .send(user)
       .expect(201);
 
     expect(bodyLogin).toBeInstanceOf(Object);
 
-    const { access, refresh } = bodyLogin;
+    const { jwt, user_id } = bodyLogin as LoginResDto;
+
+    expect(jwt).toBeInstanceOf(Object);
+
+    const { access, refresh } = jwt;
 
     expect(access).toMatch(/\S+/);
     expect(refresh).toMatch(/\S+/);
+    expect(user_id).toMatch(/\S+/);
 
-    A.access = access;
-    A.refresh = refresh;
+
+    user.access = access;
+    user.refresh = refresh;
+    user.user_id = user_id;
   });
 
-  it('Should connect to ws', async () => {
+  it.each(userDataProvider)('Should connect to ws as /$email/ user', async ({ user, label }) => {
     await new Promise<void>((resolve, reject) => {
 
       const client = new WebSocket(ws.wsHost, {
         headers: {
-          Authorization: `Bearer ${A.access}`,
+          Authorization: `Bearer ${user.access}`,
         },
       }).on('sendedMessageStatus', (data) => {
-        wsClientDebugger.emit(label.message, data);
+        wsClientDebugger.emit(label, data);
       }).on('open', () => {
         expect('should').not.toBe('problem');
         resolve();
@@ -77,7 +91,7 @@ describe('MVP', () => {
         reject(error);
       });
 
-      clients.set(A, client);
+      clients.set(user, client);
     });
   });
 
@@ -88,7 +102,7 @@ describe('MVP', () => {
    * Rebuild "/auth/login" (add "user_id" in response)
    * and use it to repair this test.
    */
-  it('Should send message', async () => {
+  it(`User /${A.email}/ should send message to user /${B.email}/`, async () => {
     const client = clients.get(A);
 
     expect(client).toBeInstanceOf(WebSocket);
@@ -101,7 +115,7 @@ describe('MVP', () => {
         expect('not').toBe('here');
       }, 2_000);
 
-      wsClientDebugger.on(label.message, (data) => {
+      wsClientDebugger.on(A.label, (data) => {
         clearTimeout(off);
         resolve();
         expect(data).toBeDefined();
@@ -120,7 +134,7 @@ I know cool song - "${faker.music.songName()}"!\
   }, 10_000);
 
   afterAll(async () => {
-    [A].forEach((u) => {
+    [A, B].forEach((u) => {
       const wsClient = clients.get(u);
 
       if (!wsClient) return;
