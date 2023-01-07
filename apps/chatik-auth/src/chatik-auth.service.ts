@@ -1,5 +1,5 @@
 import { UserEntity, UserPgRepo } from '@app/pg-db';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ChatikAuthEnv } from '../../../libs/config/src/chatik-auth';
@@ -42,7 +42,16 @@ export class ChatikAuthService {
   }
 
   async login(userJwtPayload: JwtAccessPayload) {
-    return this.generateJwtTokensPair(userJwtPayload);
+    const user = await this.userRepo.getByPK(userJwtPayload);
+
+    if (!user) {
+      throw new BadRequestException('User was not found');
+    }
+
+    return {
+      user_id: user.user_id,
+      jwt: await this.generateJwtTokensPair(userJwtPayload),
+    };
   }
 
   async refresh(userJwtPayload: JwtRefreshPayload) {

@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
-
+import * as EventEmitter from 'events';
+import { MessageGateEvent } from '../../../../libs/types/src/ws'
+import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
+import { SendMessagePubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
 
 // TODO move to fixtures
 const ws = {
@@ -20,65 +24,130 @@ const app = {
   host: `http://localhost:${process.env.TEST_CHATIK_PORT}`,
 };
 
-const A = {
-  email: faker.internet.email(),
-  password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
-  access: '',
-  refresh: '',
-};
+const [A, B] = Array.from({ length: 2 }).map(() => {
+  const email = faker.internet.email();
+  return {
+    email,
+    password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
+    access: '',
+    refresh: '',
+    user_id: '',
+  };
+});
+const userDataProvider = [A, B].map((user) => ({ email: user.email, user }));
 
 describe('MVP', () => {
-  const clients: WebSocket[] = [];
+  const clients = new WeakMap<object, WebSocket>();
+  const wsClientDebugger = new EventEmitter();
 
-  it('Should register new user', async () => {
+  it.each(userDataProvider)('Should register user with /$email/ email', async ({ user }) => {
+    const registerDto: RegisterReqDto = {
+      email: user.email,
+      password: user.password,
+    };
     const { body: bodyRegister } = await req(auth.host)
       .post(auth.POST['/auth/register'])
-      .send(A)
+      .send(registerDto)
       .expect(201);
 
     expect(bodyRegister).toBeInstanceOf(Object);
+  });
 
+  it.each(userDataProvider)('Should login as /$email/ user', async ({ user }) => {
     const { body: bodyLogin } = await req(auth.host)
       .post(auth.POST['/auth/login'])
-      .send(A)
+      .send(user)
       .expect(201);
 
     expect(bodyLogin).toBeInstanceOf(Object);
 
-    const { access, refresh } = bodyLogin;
+    const { jwt, user_id } = bodyLogin as LoginResDto;
+
+    expect(jwt).toBeInstanceOf(Object);
+
+    const { access, refresh } = jwt;
 
     expect(access).toMatch(/\S+/);
     expect(refresh).toMatch(/\S+/);
+    expect(user_id).toMatch(/\S+/);
 
-    A.access = access;
-    A.refresh = refresh;
+
+    user.access = access;
+    user.refresh = refresh;
+    user.user_id = user_id;
   });
 
-  it('Should connect to ws', async () => {
+  it.each(userDataProvider)('Should connect to ws as /$email/ user', async ({ user }) => {
     await new Promise<void>((resolve, reject) => {
-
       const client = new WebSocket(ws.wsHost, {
         headers: {
-          Authorization: `Bearer ${A.access}`,
+          Authorization: `Bearer ${user.access}`,
         },
-      }).on('message', (data) => {
-        console.log(data);
-        resolve();
+      });
+      client.on('message', (data: any) => {
+        const _data = JSON.parse(data.toString());
+        wsClientDebugger.emit(user.email, _data);
       }).on('open', () => {
-        console.log('open');
         resolve();
-      }).on('error', reject);
+      }).on('error', (error) => {
+        expect('not').toBe('here');
+        reject(error);
+      });
 
-      clients.push(client);
+      clients.set(user, client);
     });
-
   });
 
-  afterAll(async () => {
-    clients.forEach((c) => {
-      const { readyState, OPEN, CONNECTING } = c;
+  /**
+   * // TODO!!!
+   * During message sending you should add "to" property with
+   * receiver's "user_id".
+   * Rebuild "/auth/login" (add "user_id" in response)
+   * and use it to repair this test.
+   */
+  it(`User /${A.email}/ should send message to user /${B.email}/`, async () => {
+    const client = clients.get(A);
 
-      if (([OPEN, CONNECTING] as number[]).includes(readyState)) c.close();
-    })
+    expect(client).toBeInstanceOf(WebSocket);
+
+    if (!client) return;
+
+    await new Promise<void>((resolve, reject) => {
+      const off = setTimeout(() => {
+        resolve();
+        expect('not').toBe('here');
+      }, 4_000);
+
+      wsClientDebugger.on(A.email, (data: any) => {
+        clearTimeout(off);
+        resolve();
+        expect(data).toBeDefined();
+      });
+
+      const data: SendMessageSubDto = {
+        to: B.user_id,
+        text: `\
+Hi! ${faker.name.firstName()}! How are You? \
+I know cool song - "${faker.music.songName()}"!\
+`,
+      };
+
+      client.send(JSON.stringify({
+        event: MessageGateEvent.SEND_MESSAGE,
+        data,
+      }));
+    });
+  }, 10_000);
+
+  afterAll(async () => {
+    [A, B].forEach((u) => {
+      const wsClient = clients.get(u);
+
+      if (!wsClient) return;
+
+      const { readyState, OPEN, CONNECTING } = wsClient;
+
+      if (([OPEN, CONNECTING] as number[]).includes(readyState)) wsClient.close();
+    });
   });
 });
