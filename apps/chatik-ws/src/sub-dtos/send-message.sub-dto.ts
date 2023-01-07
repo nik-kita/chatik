@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class SendMessageSubDto {
   @Transform(({ value }) => {
@@ -8,4 +8,7 @@ export class SendMessageSubDto {
   @IsString()
   @IsNotEmpty()
   text: string;
+
+  @IsUUID()
+  to: string;
 }

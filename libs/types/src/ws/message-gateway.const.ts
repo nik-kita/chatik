@@ -1,5 +1,5 @@
-export enum MessageGatewayEvent {
-  SEND_MESSAGE = 'send-message',
+export enum MessageGateEvent {
+  SEND_MESSAGE = 'sendMessage',
 }
 
-export type IMessageGateway = Record<MessageGatewayEvent, any>;
+export type IMessageGate = Record<MessageGateEvent, (...args: any[]) => void>;

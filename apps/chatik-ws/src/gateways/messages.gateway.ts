@@ -1,8 +1,9 @@
 import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
-import { SubMessage } from '../../../../libs/decorators/src';
-import { IMessageGateway, MessageGatewayEvent } from '../../../../libs/types/src';
+import { GateEvent } from '../../../../libs/decorators/src';
+import { IMessageGate } from '../../../../libs/types/src';
+import { SendMessagePubDto } from '../pub-dtos/send-message.pub-dto';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 import { SendMessageSubDto } from '../sub-dtos/send-message.sub-dto';
@@ -10,8 +11,7 @@ import { ConnectionsGateway } from './connections.gateway';
 
 
 @WebSocketGateway()
-@UsePipes(new ValidationPipe())
-export class MessagesGateway extends ConnectionsGateway implements IMessageGateway {
+export class MessagesGateway extends ConnectionsGateway implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
@@ -23,12 +23,25 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGatew
     );
   }
 
-  @SubMessage()
-  [MessageGatewayEvent.SEND_MESSAGE](
-    @MessageBody() body: SendMessageSubDto,
+  @GateEvent()
+  @UsePipes(ValidationPipe)
+  sendMessage(
+    @MessageBody() { text, to }: SendMessageSubDto,
     @ConnectedSocket() ws: WebSocket,
   ) {
-    this.logger.debug(body);
-    ws.send('ok');
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const sender = this.connectedSocketManager.getByWs(ws)!;
+    const receiver = this.connectedSocketManager.getByUserId(to);
+
+    if (receiver) {
+      receiver.ws.send(SendMessagePubDto.send(sender, text));
+    } else {
+      /**
+       * // TODO
+       * here we should make
+       * push notification logic
+       * for offline user
+       */
+    }
   }
 }

@@ -3,7 +3,7 @@ import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
-import { MessageGatewayEvent } from '../../../../libs/types/src/ws'
+import { MessageGateEvent } from '../../../../libs/types/src/ws'
 
 // TODO move to fixtures
 const ws = {
@@ -101,7 +101,7 @@ describe('MVP', () => {
       });
 
       client.send(JSON.stringify({
-        event: MessageGatewayEvent.SEND_MESSAGE,
+        event: MessageGateEvent.SEND_MESSAGE,
         data: {
           text: `\
 Hi! ${faker.name.firstName()}! How are You? \
@@ -121,6 +121,6 @@ I know cool song - "${faker.music.songName()}"!\
       const { readyState, OPEN, CONNECTING } = wsClient;
 
       if (([OPEN, CONNECTING] as number[]).includes(readyState)) wsClient.close();
-    })
+    });
   });
 });
