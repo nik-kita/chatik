@@ -5,6 +5,7 @@ import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
 import { MessageGateEvent } from '../../../../libs/types/src/ws'
 import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
+import { SendMessagePubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
 
 // TODO move to fixtures
 const ws = {
@@ -23,15 +24,17 @@ const app = {
   host: `http://localhost:${process.env.TEST_CHATIK_PORT}`,
 };
 
-const [A, B] = Array.from({ length: 2 }).map(() => ({
-  email: faker.internet.email(),
-  password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
-  access: '',
-  refresh: '',
-  user_id: '',
-  label: '',
-}));
-const userDataProvider = [A, B].map((user) => ({ email: user.email, label: user.email, user }));
+const [A, B] = Array.from({ length: 2 }).map(() => {
+  const email = faker.internet.email();
+  return {
+    email,
+    password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
+    access: '',
+    refresh: '',
+    user_id: '',
+  };
+});
+const userDataProvider = [A, B].map((user) => ({ email: user.email, user }));
 
 describe('MVP', () => {
   const clients = new WeakMap<object, WebSocket>();
@@ -74,17 +77,17 @@ describe('MVP', () => {
     user.user_id = user_id;
   });
 
-  it.each(userDataProvider)('Should connect to ws as /$email/ user', async ({ user, label }) => {
+  it.each(userDataProvider)('Should connect to ws as /$email/ user', async ({ user }) => {
     await new Promise<void>((resolve, reject) => {
-
       const client = new WebSocket(ws.wsHost, {
         headers: {
           Authorization: `Bearer ${user.access}`,
         },
-      }).on('sendedMessageStatus', (data) => {
-        wsClientDebugger.emit(label, data);
+      });
+      client.on('message', (data: any) => {
+        const _data = JSON.parse(data.toString());
+        wsClientDebugger.emit(user.email, _data);
       }).on('open', () => {
-        expect('should').not.toBe('problem');
         resolve();
       }).on('error', (error) => {
         expect('not').toBe('here');
@@ -113,22 +116,25 @@ describe('MVP', () => {
       const off = setTimeout(() => {
         resolve();
         expect('not').toBe('here');
-      }, 2_000);
+      }, 4_000);
 
-      wsClientDebugger.on(A.label, (data) => {
+      wsClientDebugger.on(A.email, (data: any) => {
         clearTimeout(off);
         resolve();
         expect(data).toBeDefined();
       });
 
-      client.send(JSON.stringify({
-        event: MessageGateEvent.SEND_MESSAGE,
-        data: {
-          text: `\
+      const data: SendMessageSubDto = {
+        to: B.user_id,
+        text: `\
 Hi! ${faker.name.firstName()}! How are You? \
 I know cool song - "${faker.music.songName()}"!\
 `,
-        },
+      };
+
+      client.send(JSON.stringify({
+        event: MessageGateEvent.SEND_MESSAGE,
+        data,
       }));
     });
   }, 10_000);
