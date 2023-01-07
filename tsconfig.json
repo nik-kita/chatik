@@ -41,6 +41,12 @@
       ],
       "@app/decorators": [
         "libs/decorators/src"
+      ],
+      "@app/dto": [
+        "libs/dto/src"
+      ],
+      "@app/dto/*": [
+        "libs/dto/src/*"
       ]
     }
   }
