@@ -1,7 +1,4 @@
-export enum GateClientEvent {
-  RECEIVE_MESSAGE = 'receiveMessage',
-  RECEIVE_SEND_MESSAGE_STATUS = 'receiveSendMessageStatus',
-}
+import { GateClientEvent } from './gate-client-event.enum';
 
 export type GateClientMessage<T, U extends GateClientEvent> = {
   data: T,
