@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
-
+import * as EventEmitter from 'events';
+import { MessageGateEvent } from '../../../../libs/types/src/ws'
 
 // TODO move to fixtures
 const ws = {
@@ -26,9 +28,13 @@ const A = {
   access: '',
   refresh: '',
 };
+const label = {
+  message: 'message',
+}
 
 describe('MVP', () => {
-  const clients: WebSocket[] = [];
+  const clients = new WeakMap<object, WebSocket>();
+  const wsClientDebugger = new EventEmitter();
 
   it('Should register new user', async () => {
     const { body: bodyRegister } = await req(auth.host)
@@ -61,24 +67,67 @@ describe('MVP', () => {
         headers: {
           Authorization: `Bearer ${A.access}`,
         },
-      }).on('message', (data) => {
-        console.log(data);
-        resolve();
+      }).on('sendedMessageStatus', (data) => {
+        wsClientDebugger.emit(label.message, data);
       }).on('open', () => {
-        console.log('open');
+        expect('should').not.toBe('problem');
         resolve();
-      }).on('error', reject);
+      }).on('error', (error) => {
+        expect('not').toBe('here');
+        reject(error);
+      });
 
-      clients.push(client);
+      clients.set(A, client);
     });
-
   });
 
-  afterAll(async () => {
-    clients.forEach((c) => {
-      const { readyState, OPEN, CONNECTING } = c;
+  /**
+   * // TODO!!!
+   * During message sending you should add "to" property with
+   * receiver's "user_id".
+   * Rebuild "/auth/login" (add "user_id" in response)
+   * and use it to repair this test.
+   */
+  it('Should send message', async () => {
+    const client = clients.get(A);
 
-      if (([OPEN, CONNECTING] as number[]).includes(readyState)) c.close();
-    })
+    expect(client).toBeInstanceOf(WebSocket);
+
+    if (!client) return;
+
+    await new Promise<void>((resolve, reject) => {
+      const off = setTimeout(() => {
+        resolve();
+        expect('not').toBe('here');
+      }, 2_000);
+
+      wsClientDebugger.on(label.message, (data) => {
+        clearTimeout(off);
+        resolve();
+        expect(data).toBeDefined();
+      });
+
+      client.send(JSON.stringify({
+        event: MessageGateEvent.SEND_MESSAGE,
+        data: {
+          text: `\
+Hi! ${faker.name.firstName()}! How are You? \
+I know cool song - "${faker.music.songName()}"!\
+`,
+        },
+      }));
+    });
+  }, 10_000);
+
+  afterAll(async () => {
+    [A].forEach((u) => {
+      const wsClient = clients.get(u);
+
+      if (!wsClient) return;
+
+      const { readyState, OPEN, CONNECTING } = wsClient;
+
+      if (([OPEN, CONNECTING] as number[]).includes(readyState)) wsClient.close();
+    });
   });
 });

@@ -18,6 +18,7 @@
     },
   ],
   "settings": {
+    "workbench.sideBar.location": "right",
     "cSpell.words": [
       "Chatik",
       "nestjs",

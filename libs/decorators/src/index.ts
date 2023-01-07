@@ -1,1 +1,1 @@
-export { SubMessage } from './sub-message.decorator';
+export { GateEvent } from './gate-event.decorator';

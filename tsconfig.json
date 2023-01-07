@@ -33,14 +33,17 @@
       "@app/pg-db": [
         "libs/pg-db/src"
       ],
-      "@app/req-dtos/chatik-auth": [
-        "libs/req-dtos/src/chatik-auth"
-      ],
       "@app/types": [
         "libs/types/src"
       ],
       "@app/decorators": [
         "libs/decorators/src"
+      ],
+      "@app/dto/http": [
+        "libs/dto/src/http"
+      ],
+      "@app/dto/ws": [
+        "libs/dto/src/ws"
       ]
     }
   }

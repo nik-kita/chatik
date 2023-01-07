@@ -1,16 +1,16 @@
-import { Logger } from '@nestjs/common';
-import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
-import { SubMessage } from '../../../../libs/decorators/src';
-import { IMessageGateway } from '../../../../libs/types/src';
+import { GateEvent } from '../../../../libs/decorators/src';
+import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
-import { SendMessageSubDto } from '../sub-dtos/send-message.sub-dto';
-import { ConnectionsGateway } from './connections.gateway';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
+import { ConnectionsGateway } from './connections.gateway';
+import { SendMessagePubDto, SendMessageStatusPubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
 
 
 @WebSocketGateway()
-export class MessagesGateway extends ConnectionsGateway implements IMessageGateway {
+export class MessagesGateway extends ConnectionsGateway implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
@@ -22,25 +22,31 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGatew
     );
   }
 
-  @SubscribeMessage('*')
-  all(...args: any[]) {
-    args.forEach((a) => console.log(a));
-  }
-
-  @SubMessage()
-  ['on-send-message'](
-    @MessageBody() body: SendMessageSubDto,
+  @GateEvent()
+  @UsePipes(ValidationPipe)
+  sendMessage(
+    @MessageBody() { text, to }: SendMessageSubDto,
     @ConnectedSocket() ws: WebSocket,
   ) {
-    const client = this.connectedSocketManager.getByWs(ws);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const sender = this.connectedSocketManager.getByWs(ws)!;
+    const receiver = this.connectedSocketManager.getByUserId(to);
+    let resStatus = StatusForSender.SENDING;
 
-    this.logger.debug({
-      message: body,
-      from: client?.userId,
-    });
-  }
+    if (receiver) {
+      receiver.ws.send(SendMessagePubDto.send(sender, text));
+      resStatus = StatusForSender.READ;
+    } else {
+      /**
+       * // TODO
+       * here we should make
+       * push notification logic
+       * for offline user
+       */
+      resStatus = StatusForSender.SENT;
+    }
 
-  receiveMessage() {
-    // TODO
+    // TODO declare const for event
+    sender.ws.send(SendMessageStatusPubDto.send(resStatus));
   }
 }
