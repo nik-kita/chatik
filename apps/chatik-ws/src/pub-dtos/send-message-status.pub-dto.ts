@@ -4,6 +4,8 @@ export class SendMessageStatusPubDto {
   status: StatusForSender;
 
   public static send(status: StatusForSender) {
-    return JSON.stringify({ status });
+    return JSON.stringify({
+      sendedMessageStatus: status,
+    });
   }
 }
