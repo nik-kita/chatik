@@ -12,7 +12,7 @@ import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-co
 
 
 
-export abstract class ConnectionsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+export abstract class ConnectionGate implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,

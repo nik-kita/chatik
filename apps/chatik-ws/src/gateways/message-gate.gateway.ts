@@ -5,12 +5,12 @@ import { GateEvent } from '../../../../libs/decorators/src';
 import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { ConnectionsGateway } from './connections.gateway';
+import { ConnectionGate } from './connection-gate.gateway';
 import { SendMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
 
 @WebSocketGateway()
-export class MessagesGateway extends ConnectionsGateway implements IMessageGate {
+export class MessageGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
@@ -18,7 +18,7 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGate 
     super(
       onlyAuthGuard,
       connectedSocketManager,
-      new Logger(MessagesGateway.name),
+      new Logger(MessageGate.name),
     );
   }
 
