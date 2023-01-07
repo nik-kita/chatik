@@ -1,6 +1,6 @@
 import { WebSocket } from 'ws';
 
-export type WsAuthClient = {
+export type GateClient = {
   userId: string,
   ws: WebSocket,
 };

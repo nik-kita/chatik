@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "path": "../libs/types",
+      "name": "lib/types"
+    },
+    {
       "path": "..",
       "name": "_cwd"
     },
