@@ -1,7 +1,7 @@
 import { GateClient } from '../../../../types/src';
-import { SendMessageSubDto } from '../sub/send-message.sub-dto';
+import { SendMessageGateDto } from '../gate/send-message.gate-dto';
 
-export class SendMessagePubDto implements Pick<SendMessageSubDto, 'text'> {
+export class SendMessageGateClientDto implements Pick<SendMessageGateDto, 'text'> {
   text: string;
 
   from: string;

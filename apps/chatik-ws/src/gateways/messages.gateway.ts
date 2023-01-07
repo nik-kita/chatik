@@ -6,7 +6,7 @@ import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 import { ConnectionsGateway } from './connections.gateway';
-import { SendMessagePubDto, SendMessageStatusPubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
+import { SendMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
 
 @WebSocketGateway()
@@ -25,7 +25,7 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGate 
   @GateEvent()
   @UsePipes(ValidationPipe)
   sendMessage(
-    @MessageBody() { text, to }: SendMessageSubDto,
+    @MessageBody() { text, to }: SendMessageGateDto,
     @ConnectedSocket() ws: WebSocket,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -34,7 +34,7 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGate 
     let resStatus = StatusForSender.SENDING;
 
     if (receiver) {
-      receiver.ws.send(SendMessagePubDto.send(sender, text));
+      receiver.ws.send(SendMessageGateClientDto.send(sender, text));
       resStatus = StatusForSender.READ;
     } else {
       /**
@@ -47,6 +47,6 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGate 
     }
 
     // TODO declare const for event
-    sender.ws.send(SendMessageStatusPubDto.send(resStatus));
+    sender.ws.send(SendMessageStatusGateClientDto.send(resStatus));
   }
 }

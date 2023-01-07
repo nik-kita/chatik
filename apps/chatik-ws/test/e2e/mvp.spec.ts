@@ -5,7 +5,7 @@ import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
 import { MessageGateEvent } from '../../../../libs/types/src/ws'
 import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
-import { SendMessagePubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
+import { SendMessageGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
 // TODO move to fixtures
 const ws = {
@@ -124,7 +124,7 @@ describe('MVP', () => {
         expect(data).toBeDefined();
       });
 
-      const data: SendMessageSubDto = {
+      const data: SendMessageGateDto = {
         to: B.user_id,
         text: `\
 Hi! ${faker.name.firstName()}! How are You? \

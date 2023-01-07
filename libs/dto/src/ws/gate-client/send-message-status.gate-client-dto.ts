@@ -1,6 +1,6 @@
 import { StatusForSender } from '../../../../types/src';
 
-export class SendMessageStatusPubDto {
+export class SendMessageStatusGateClientDto {
   status: StatusForSender;
 
   public static send(status: StatusForSender) {

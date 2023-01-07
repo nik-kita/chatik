@@ -1,3 +1,3 @@
-export { SendMessageSubDto } from './sub/send-message.sub-dto';
-export { SendMessageStatusPubDto } from './pub/send-message-status.pub-dto';
-export { SendMessagePubDto } from './pub/send-message.pub-dto';
+export { SendMessageGateDto } from './gate/send-message.gate-dto';
+export { SendMessageStatusGateClientDto } from './gate-client/send-message-status.gate-client-dto';
+export { SendMessageGateClientDto } from './gate-client/send-message.gate-client-dto';
