@@ -3,12 +3,10 @@ import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websocke
 import { WebSocket } from 'ws';
 import { GateEvent } from '../../../../libs/decorators/src';
 import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
-import { SendMessagePubDto } from '../pub-dtos/send-message.pub-dto';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { SendMessageSubDto } from '../sub-dtos/send-message.sub-dto';
 import { ConnectionsGateway } from './connections.gateway';
-import { SendMessageStatusPubDto } from '../pub-dtos/send-message-status.pub-dto';
+import { SendMessagePubDto, SendMessageStatusPubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
 
 
 @WebSocketGateway()

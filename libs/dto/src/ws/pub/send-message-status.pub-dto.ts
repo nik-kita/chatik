@@ -1,4 +1,4 @@
-import { StatusForSender } from '../../../../libs/types/src';
+import { StatusForSender } from '../../../../types/src';
 
 export class SendMessageStatusPubDto {
   status: StatusForSender;
