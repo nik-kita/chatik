@@ -2,7 +2,7 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 
 // TODO replace 'object' with concrete type for app entities
 export abstract class PgRepo<
-  E extends { [key: string]: any }, 
+  E extends { [key: string]: any },
   PK extends keyof E,
   InsertE extends Partial<Omit<E, PK>> = Partial<Omit<E, PK>>,
 > {

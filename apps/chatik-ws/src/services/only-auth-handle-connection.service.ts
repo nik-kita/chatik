@@ -14,7 +14,7 @@ export class OnlyAuthHandleConnectionService {
     const headers = extraArg
       .rawHeaders
       ?.reduce((acc, h, i, arr) => {
-        if ((i + 1) % 2 === 0) acc[arr[i - 1]] = h;
+        if ((i + 1) % 2 === 0) acc[ arr[ i - 1 ] ] = h;
 
         return acc;
       }, {} as { Authorization?: string });

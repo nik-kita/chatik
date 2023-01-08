@@ -15,9 +15,9 @@ const ws = {
 const auth = {
   host: `http://localhost:${process.env.TEST_CHATIK_AUTH_PORT}`,
   POST: {
-    ['/auth/register']: '/auth/register',
-    ['/auth/login']: '/auth/login',
-    ['/auth/refresh']: '/auth/refresh',
+    [ '/auth/register' ]: '/auth/register',
+    [ '/auth/login' ]: '/auth/login',
+    [ '/auth/refresh' ]: '/auth/refresh',
   },
 }
 const app = {
@@ -26,7 +26,8 @@ const app = {
 
 const [A, B] = Array.from({ length: 2 }).map(() => {
   const email = faker.internet.email();
-  return {
+
+return {
     email,
     password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
     access: '',
@@ -46,7 +47,7 @@ describe('MVP', () => {
       password: user.password,
     };
     const { body: bodyRegister } = await req(auth.host)
-      .post(auth.POST['/auth/register'])
+      .post(auth.POST[ '/auth/register' ])
       .send(registerDto)
       .expect(201);
 
@@ -55,7 +56,7 @@ describe('MVP', () => {
 
   it.each(userDataProvider)('Should login as /$email/ user', async ({ user }) => {
     const { body: bodyLogin } = await req(auth.host)
-      .post(auth.POST['/auth/login'])
+      .post(auth.POST[ '/auth/login' ])
       .send(user)
       .expect(201);
 

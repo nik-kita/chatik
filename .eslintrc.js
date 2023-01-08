@@ -16,6 +16,10 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'newline-before-return': 'error',
+    'no-trailing-spaces': 'error',
+    'computed-property-spacing': ['error', 'always'],
+    'object-curly-spacing': ['error', 'always'],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

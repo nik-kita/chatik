@@ -16,7 +16,7 @@ const envFilePath = ({
   prod: join(cwd, '.prod.env'),
   dev: join(cwd, '.dev.env'),
   test: join(cwd, '.test.env'),
-} satisfies Record<NodeEnv, string>)[process.env.NODE_ENV || 'test'];
+} satisfies Record<NodeEnv, string>)[ process.env.NODE_ENV || 'test' ];
 
 export function genConfigOptions(Expected: new () => any): ConfigModuleOptions {
   return {
