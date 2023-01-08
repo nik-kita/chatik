@@ -16,6 +16,15 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { 
+        'argsIgnorePattern': '^_',
+        "varsIgnorePattern": '^_',
+        'caughtErrorsIgnorePattern': '^_',
+      }
+    ],
     'quotes': ['error', 'single'],
     'semi': 'error',
     'newline-before-return': 'error',
