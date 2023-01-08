@@ -3,11 +3,10 @@ import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websocke
 import { WebSocket } from 'ws';
 import { GateEvent } from '../../../../../libs/decorators/src';
 import { ReceiveMessageGateClientDto, SendMessageGateDto, SendMessageStatusGateClientDto } from '../../../../../libs/dto/src/ws';
-import { MessagePgRepo } from '../../../../../libs/pg-db/src';
 import { IMessageGate, StatusForSender } from '../../../../../libs/types/src';
 import { ConnectionGate } from '../../common/connection-gate.gateway';
-import { OnlyAuthHandleConnectionService } from '../../common/services/only-auth-handle-connection.service';
 import { ConnectedSocketManager } from '../../common/services/connected-socket-manager';
+import { OnlyAuthHandleConnectionService } from '../../common/services/only-auth-handle-connection.service';
 
 
 @WebSocketGateway()
@@ -15,7 +14,6 @@ export class OneToOneGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
-    protected messageRepo: MessagePgRepo,
   ) {
     super(
       onlyAuthGuard,

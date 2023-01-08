@@ -3,19 +3,25 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatikWsConfigModule, ChatikWsEnv } from '../../../../libs/config/src/chatik-ws';
-import { MessageEntity, MessagePgRepo, PgDbModule, UserEntity } from '../../../../libs/pg-db/src';
+import { MemberPgRepo, MessageEntity, MessagePgRepo, PgDbModule, UserEntity } from '../../../../libs/pg-db/src';
 import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
+import { MemberEntity } from '../../../../libs/pg-db/src/entities/member.entity';
 
 const SHARING_PROVIDERS = [
   OnlyAuthHandleConnectionService,
   ConnectedSocketManager,
   MessagePgRepo,
+  MemberPgRepo,
 ];
 const SHARING_MODULES = [
   ChatikWsConfigModule,
   PgDbModule,
-  TypeOrmModule.forFeature([UserEntity, MessageEntity]),
+  TypeOrmModule.forFeature([
+    UserEntity,
+    MessageEntity,
+    MemberEntity,
+  ]),
   JwtModule.registerAsync({
     inject: [ConfigService],
     useFactory(config: ConfigService<ChatikWsEnv>) {
