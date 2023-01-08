@@ -9,4 +9,7 @@ export class MessageEntity implements IPgMessage {
 
   @Column({ type: 'varchar', nullable: false })
   text: string;
+
+  @Column({ type: 'uuid', nullable: false, foreignKeyConstraintName: 'fk_user_user_id' })
+  user_id: string;
 }

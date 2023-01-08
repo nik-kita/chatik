@@ -46,7 +46,6 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
       resStatus = StatusForSender.SENT;
     }
 
-    // TODO declare const for event
     sender.ws.send(SendMessageStatusGateClientDto.generate(resStatus));
   }
 }
