@@ -5,6 +5,10 @@
       "name": "lib/types"
     },
     {
+      "path": "../libs/pg-db",
+      "name": "lib/pg-db"
+    },
+    {
       "path": "..",
       "name": "_cwd"
     },
