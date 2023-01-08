@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WebSocket } from 'ws';
-import { GateClient } from '../../../../libs/types/src';
+import { GateClient } from '../../../../../libs/types/src/ws';
 
 
 @Injectable()

@@ -7,13 +7,4 @@ export class OneToOneService {
     private messageRepo: MessagePgRepo,
     private memberRepo: MemberPgRepo,
   ) {}
-
-  /**
-   * 
-   * // TODO
-   * // TODO
-   * // TODO
-   * // TODO
-   * // TODO
-   */
 }

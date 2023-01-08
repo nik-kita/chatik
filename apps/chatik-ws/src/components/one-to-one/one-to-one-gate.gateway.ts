@@ -1,4 +1,4 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
 import { GateEvent } from '../../../../../libs/decorators/src';
@@ -7,18 +7,22 @@ import { IMessageGate, StatusForSender } from '../../../../../libs/types/src';
 import { ConnectionGate } from '../../common/connection-gate.gateway';
 import { ConnectedSocketManager } from '../../common/services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../../common/services/only-auth-handle-connection.service';
+import { WsExceptionFilter } from '../../common/exceptions/ws-exception.filter';
 
 
 @WebSocketGateway()
+@UseFilters(WsExceptionFilter)
 export class OneToOneGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
+    protected wsExceptionFilter: WsExceptionFilter,
   ) {
     super(
       onlyAuthGuard,
       connectedSocketManager,
       new Logger(OneToOneGate.name),
+      wsExceptionFilter,
     );
   }
 
