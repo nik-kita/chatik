@@ -3,16 +3,19 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatikWsConfigModule, ChatikWsEnv } from '../../../../libs/config/src/chatik-ws';
-import { MemberPgRepo, MessageEntity, MessagePgRepo, PgDbModule, UserEntity } from '../../../../libs/pg-db/src';
+import { MemberPgRepo, MessageEntity, MessagePgRepo, PgDbModule, UserEntity, UserPgRepo } from '../../../../libs/pg-db/src';
 import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
 import { MemberEntity } from '../../../../libs/pg-db/src/entities/member.entity';
+import { WsExceptionFilter } from './exceptions/ws-exception.filter';
 
 const SHARING_PROVIDERS = [
   OnlyAuthHandleConnectionService,
   ConnectedSocketManager,
   MessagePgRepo,
   MemberPgRepo,
+  UserPgRepo,
+  WsExceptionFilter,
 ];
 const SHARING_MODULES = [
   ChatikWsConfigModule,
