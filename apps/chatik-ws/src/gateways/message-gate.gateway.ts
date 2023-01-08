@@ -6,7 +6,7 @@ import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 import { ConnectionGate } from './connection-gate.gateway';
-import { SendMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
+import { ReceiveMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
 
 @WebSocketGateway()
@@ -34,7 +34,7 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
     let resStatus = StatusForSender.SENDING;
 
     if (receiver) {
-      receiver.ws.send(SendMessageGateClientDto.send(sender, text));
+      receiver.ws.send(ReceiveMessageGateClientDto.generate(sender, text));
       resStatus = StatusForSender.READ;
     } else {
       /**
@@ -47,6 +47,6 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
     }
 
     // TODO declare const for event
-    sender.ws.send(SendMessageStatusGateClientDto.send(resStatus));
+    sender.ws.send(SendMessageStatusGateClientDto.generate(resStatus));
   }
 }

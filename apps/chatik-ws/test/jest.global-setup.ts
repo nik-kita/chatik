@@ -8,6 +8,11 @@ config({ path: join(__dirname, '.test.env') });
 
 
 export default async () => {
+
+    if (!process.env.TEST_PG_FRESH) {
+        return;
+    }
+
     const client = new Client({
         host: process.env.TEST_PG_HOST,
         user: process.env.TEST_PG_USER,
