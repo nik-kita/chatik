@@ -7,7 +7,7 @@ export type NodeEnv = typeof NodeEnvs[number];
 
 export class FullConfig {
   @IsIn(NodeEnvs)
-  NODE_ENV: NodeEnv = 'dev';
+  NODE_ENV: NodeEnv = 'test';
 
   @IsString()
   PG_HOST = 'localhost';

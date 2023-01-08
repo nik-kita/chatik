@@ -1,8 +1,9 @@
 import { IPgMessage } from '../../../types/src/pg-entities/pg-message.interface';
-import { PrimaryGeneratedColumn, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 
 
+@Entity({ name: 'message' })
 export class MessageEntity implements IPgMessage {
   @PrimaryGeneratedColumn('uuid')
   message_id: string;

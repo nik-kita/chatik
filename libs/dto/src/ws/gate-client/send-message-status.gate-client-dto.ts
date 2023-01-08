@@ -1,7 +1,13 @@
+import { MessageEntity } from '../../../../pg-db/src';
 import { GateClientEvent, StatusForSender } from '../../../../types/src';
 import { GateClientDto } from './gate-client-dto';
 
-export class SendMessageStatusGateClientDto extends GateClientDto<{ status: StatusForSender }>{
+
+type SendType =   {
+  status: StatusForSender,
+  message_id: MessageEntity['message_id'],
+};
+export class SendMessageStatusGateClientDto extends GateClientDto<SendType>{
   protected generateJson(data) {
     return {
       event: GateClientEvent.RECEIVE_SEND_MESSAGE_STATUS,
@@ -9,9 +15,7 @@ export class SendMessageStatusGateClientDto extends GateClientDto<{ status: Stat
     };
   }
 
-  public static generate(status: StatusForSender) {
-    return new SendMessageStatusGateClientDto().jsonToString({
-      status,
-    });
+  public static generate(data: SendType) {
+    return new SendMessageStatusGateClientDto().jsonToString(data);
   }
 }

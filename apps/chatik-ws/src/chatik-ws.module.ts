@@ -29,6 +29,7 @@ import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-con
     MessageGate,
     OnlyAuthHandleConnectionService,
     ConnectedSocketManager,
+    MessagePgRepo,
     UserPgRepo,
     MessagePgRepo,
   ],

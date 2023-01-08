@@ -7,6 +7,7 @@ import { FullConfig } from '../libs/config/src/full-config';
 import { join } from 'path';
 
 config();
+config({ path: `.${process.env.NODE_ENV}.env`})
 
 class DataSourceEnv extends PickType(FullConfig, [
   'NODE_ENV',
@@ -17,10 +18,17 @@ class DataSourceEnv extends PickType(FullConfig, [
   'PG_DB_NAME',
 ]) { }
 
-const dsEnv: DataSourceEnv = configValidate(DataSourceEnv)(process.env);
+let dsEnv!: DataSourceEnv;
 
-export const AppDataSource = new DataSource({
-  type: 'postgres',
+try {
+  dsEnv = configValidate(DataSourceEnv)(process.env);
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}
+
+const configuration = {
+  type: 'postgres' as const,
   host: dsEnv.PG_HOST,
   port: dsEnv.PG_PORT,
   username: dsEnv.PG_USER,
@@ -30,4 +38,6 @@ export const AppDataSource = new DataSource({
   logging: true,
   database: dsEnv.PG_DB_NAME,
   migrations: [join(__dirname, 'migrations/*')],
-});
+};
+
+export const AppDataSource = new DataSource(configuration);

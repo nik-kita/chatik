@@ -7,6 +7,7 @@ import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
 import { ConnectionGate } from './connection-gate.gateway';
 import { ReceiveMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
+import { MessagePgRepo } from '../../../../libs/pg-db/src';
 
 
 @WebSocketGateway()
@@ -14,6 +15,7 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
+    protected messageRepo: MessagePgRepo,
   ) {
     super(
       onlyAuthGuard,
@@ -24,18 +26,18 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
 
   @GateEvent()
   @UsePipes(ValidationPipe)
-  sendMessage(
+  async sendMessage(
     @MessageBody() { text, to }: SendMessageGateDto,
     @ConnectedSocket() ws: WebSocket,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sender = this.connectedSocketManager.getByWs(ws)!;
     const receiver = this.connectedSocketManager.getByUserId(to);
-    let resStatus = StatusForSender.SENDING;
+    let status = StatusForSender.SENDING;
 
     if (receiver) {
       receiver.ws.send(ReceiveMessageGateClientDto.generate(sender, text));
-      resStatus = StatusForSender.READ;
+      status = StatusForSender.READ;
     } else {
       /**
        * // TODO
@@ -43,9 +45,18 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
        * push notification logic
        * for offline user
        */
-      resStatus = StatusForSender.SENT;
+      status = StatusForSender.SENT;
     }
 
-    sender.ws.send(SendMessageStatusGateClientDto.generate(resStatus));
+    const { message_id } = await this.messageRepo.insert({
+      text,
+      user_id: sender.userId,
+    });
+
+
+    sender.ws.send(SendMessageStatusGateClientDto.generate({
+      message_id,
+      status,
+    }));
   }
 }

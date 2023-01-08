@@ -2,7 +2,7 @@ import { FindOptionsWhere, Repository } from 'typeorm';
 
 // TODO replace 'object' with concrete type for app entities
 export abstract class PgRepo<
-  E extends object, 
+  E extends { [key: string]: any }, 
   PK extends keyof E,
   InsertE extends Partial<Omit<E, PK>> = Partial<Omit<E, PK>>,
 > {
@@ -11,10 +11,11 @@ export abstract class PgRepo<
     protected pk: PK,
   ) { }
 
-  insert(data: InsertE | InsertE[]) {
-    console.log(data);
-    // TODO rm any!
-    return this.repo.insert(data as any); // TODO return { [PK]: string } res
+  async insert(data: InsertE) {
+    const { raw: [res] } = await this.repo.insert(data);
+
+
+    return res as Record<PK, string>;
   }
 
   getByPK<S extends (keyof E)[]>(pk: Pick<E, PK>, select?: S) {
