@@ -44,9 +44,6 @@ export abstract class ConnectionGate implements OnGatewayInit, OnGatewayConnecti
       });
     } catch (error) {
       if (error instanceof UnAuthConnectionWsException) {
-        console.log(error instanceof UnAuthConnectionWsException);
-        console.log(error.name);
-        console.log(error);
         this.wsExceptionFilter.catch(error, {
           switchToWs: () => ({
             getClient: () => client,

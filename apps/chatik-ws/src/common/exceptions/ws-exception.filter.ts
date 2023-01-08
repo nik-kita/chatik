@@ -26,10 +26,8 @@ export class WsExceptionFilter implements ExceptionFilter {
       }
     };
     const strRes = JSON.stringify(res);
-    console.log(exception);
 
     if (exception instanceof UnAuthConnectionWsException) {
-      console.log('hi');
       client.close(HttpStatus.UNAUTHORIZED + 4_000, strRes);
 
       return;
