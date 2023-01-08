@@ -9,4 +9,4 @@ export default async (): Promise<Config.InitialOptions> => {
     displayName: 'apps/chatik',
     globalSetup: '<rootDir>/test/jest.global-setup.ts',
   };
-}
+};

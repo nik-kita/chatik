@@ -21,7 +21,7 @@ import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-con
           verifyOptions: {
             ignoreExpiration: false,
           }
-        }
+        };
       },
     }),
   ],

@@ -16,6 +16,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'semi': 'error',
     'newline-before-return': 'error',
     'no-trailing-spaces': 'error',
     'computed-property-spacing': ['error', 'always'],

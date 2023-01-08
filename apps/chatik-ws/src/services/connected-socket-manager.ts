@@ -30,7 +30,7 @@ export class ConnectedSocketManager {
     const client = this.clientByWsMap.get(ws);
 
     if (client) {
-      this.rm(client)
+      this.rm(client);
 
       return client.userId;
     }
@@ -42,7 +42,7 @@ export class ConnectedSocketManager {
     const client = this.clientByUserIdMap.get(userId);
 
     if (client) {
-      this.rm(client)
+      this.rm(client);
 
       return client.userId;
     }

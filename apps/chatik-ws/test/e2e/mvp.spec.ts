@@ -3,7 +3,7 @@ import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
-import { GateClientMessage, GateMessage, MessageGateEvent } from '../../../../libs/types/src/ws'
+import { GateClientMessage, GateMessage, MessageGateEvent } from '../../../../libs/types/src/ws';
 import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
 import { ReceiveMessageGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
@@ -19,7 +19,7 @@ const auth = {
     [ '/auth/login' ]: '/auth/login',
     [ '/auth/refresh' ]: '/auth/refresh',
   },
-}
+};
 const app = {
   host: `http://localhost:${process.env.TEST_CHATIK_PORT}`,
 };

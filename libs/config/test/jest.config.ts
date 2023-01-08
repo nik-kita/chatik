@@ -8,4 +8,4 @@ export default async (): Promise<Config.InitialOptions> => {
     preset: 'ts-jest',
     displayName: 'libs/config',
   };
-}
+};
