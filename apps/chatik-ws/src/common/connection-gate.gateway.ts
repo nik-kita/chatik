@@ -7,8 +7,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 import { JwtAccessPayload } from '../../../../libs/types/src';
-import { ConnectedSocketManager } from '../services/connected-socket-manager';
-import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
+import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
+import { ConnectedSocketManager } from './services/connected-socket-manager';
 
 
 

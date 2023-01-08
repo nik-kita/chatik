@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JwtAccessPayload } from '../../../../libs/types/src';
+import { JwtAccessPayload } from '../../../../../libs/types/src';
 
 @Injectable()
 export class OnlyAuthHandleConnectionService {

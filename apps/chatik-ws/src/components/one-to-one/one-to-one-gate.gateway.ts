@@ -1,17 +1,17 @@
 import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
-import { GateEvent } from '../../../../libs/decorators/src';
-import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
-import { ConnectedSocketManager } from '../services/connected-socket-manager';
-import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { ConnectionGate } from './connection-gate.gateway';
-import { ReceiveMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
-import { MessagePgRepo } from '../../../../libs/pg-db/src';
+import { GateEvent } from '../../../../../libs/decorators/src';
+import { ReceiveMessageGateClientDto, SendMessageGateDto, SendMessageStatusGateClientDto } from '../../../../../libs/dto/src/ws';
+import { MessagePgRepo } from '../../../../../libs/pg-db/src';
+import { IMessageGate, StatusForSender } from '../../../../../libs/types/src';
+import { ConnectionGate } from '../../common/connection-gate.gateway';
+import { OnlyAuthHandleConnectionService } from '../../common/services/only-auth-handle-connection.service';
+import { ConnectedSocketManager } from '../../common/services/connected-socket-manager';
 
 
 @WebSocketGateway()
-export class MessageGate extends ConnectionGate implements IMessageGate {
+export class OneToOneGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
@@ -20,7 +20,7 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
     super(
       onlyAuthGuard,
       connectedSocketManager,
-      new Logger(MessageGate.name),
+      new Logger(OneToOneGate.name),
     );
   }
 
@@ -48,14 +48,14 @@ export class MessageGate extends ConnectionGate implements IMessageGate {
       status = StatusForSender.SENT;
     }
 
-    const { message_id } = await this.messageRepo.insert({
-      text,
-      user_id: sender.userId,
-    });
+    // const { message_id } = await this.messageRepo.insert({
+    //   text,
+    //   user_id: sender.userId,
+    // });
 
 
     sender.ws.send(SendMessageStatusGateClientDto.generate({
-      message_id,
+      message_id: '// TODO replace with real message_id',
       status,
     }));
   }
