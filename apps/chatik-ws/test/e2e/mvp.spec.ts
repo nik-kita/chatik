@@ -3,9 +3,9 @@ import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
 import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
-import { MessageGateEvent } from '../../../../libs/types/src/ws'
+import { GateClientMessage, GateMessage, MessageGateEvent } from '../../../../libs/types/src/ws'
 import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
-import { SendMessagePubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
+import { ReceiveMessageGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
 
 // TODO move to fixtures
 const ws = {
@@ -98,13 +98,7 @@ describe('MVP', () => {
     });
   });
 
-  /**
-   * // TODO!!!
-   * During message sending you should add "to" property with
-   * receiver's "user_id".
-   * Rebuild "/auth/login" (add "user_id" in response)
-   * and use it to repair this test.
-   */
+
   it(`User /${A.email}/ should send message to user /${B.email}/`, async () => {
     const client = clients.get(A);
 
@@ -124,18 +118,18 @@ describe('MVP', () => {
         expect(data).toBeDefined();
       });
 
-      const data: SendMessageSubDto = {
-        to: B.user_id,
-        text: `\
+      const data: GateMessage<SendMessageGateDto> = {
+        event: MessageGateEvent.SEND_MESSAGE,
+        data: {
+          to: B.user_id,
+          text: `\
 Hi! ${faker.name.firstName()}! How are You? \
 I know cool song - "${faker.music.songName()}"!\
 `,
+        }
       };
 
-      client.send(JSON.stringify({
-        event: MessageGateEvent.SEND_MESSAGE,
-        data,
-      }));
+      client.send(JSON.stringify(data));
     });
   }, 10_000);
 

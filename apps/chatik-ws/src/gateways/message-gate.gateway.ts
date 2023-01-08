@@ -5,37 +5,39 @@ import { GateEvent } from '../../../../libs/decorators/src';
 import { IMessageGate, StatusForSender } from '../../../../libs/types/src';
 import { ConnectedSocketManager } from '../services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from '../services/only-auth-handle-connection.service';
-import { ConnectionsGateway } from './connections.gateway';
-import { SendMessagePubDto, SendMessageStatusPubDto, SendMessageSubDto } from '../../../../libs/dto/src/ws';
+import { ConnectionGate } from './connection-gate.gateway';
+import { ReceiveMessageGateClientDto, SendMessageStatusGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
+import { MessagePgRepo } from '../../../../libs/pg-db/src';
 
 
 @WebSocketGateway()
-export class MessagesGateway extends ConnectionsGateway implements IMessageGate {
+export class MessageGate extends ConnectionGate implements IMessageGate {
   constructor(
     protected onlyAuthGuard: OnlyAuthHandleConnectionService,
     protected connectedSocketManager: ConnectedSocketManager,
+    protected messageRepo: MessagePgRepo,
   ) {
     super(
       onlyAuthGuard,
       connectedSocketManager,
-      new Logger(MessagesGateway.name),
+      new Logger(MessageGate.name),
     );
   }
 
   @GateEvent()
   @UsePipes(ValidationPipe)
-  sendMessage(
-    @MessageBody() { text, to }: SendMessageSubDto,
+  async sendMessage(
+    @MessageBody() { text, to }: SendMessageGateDto,
     @ConnectedSocket() ws: WebSocket,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const sender = this.connectedSocketManager.getByWs(ws)!;
     const receiver = this.connectedSocketManager.getByUserId(to);
-    let resStatus = StatusForSender.SENDING;
+    let status = StatusForSender.SENDING;
 
     if (receiver) {
-      receiver.ws.send(SendMessagePubDto.send(sender, text));
-      resStatus = StatusForSender.READ;
+      receiver.ws.send(ReceiveMessageGateClientDto.generate(sender, text));
+      status = StatusForSender.READ;
     } else {
       /**
        * // TODO
@@ -43,10 +45,18 @@ export class MessagesGateway extends ConnectionsGateway implements IMessageGate 
        * push notification logic
        * for offline user
        */
-      resStatus = StatusForSender.SENT;
+      status = StatusForSender.SENT;
     }
 
-    // TODO declare const for event
-    sender.ws.send(SendMessageStatusPubDto.send(resStatus));
+    const { message_id } = await this.messageRepo.insert({
+      text,
+      user_id: sender.userId,
+    });
+
+
+    sender.ws.send(SendMessageStatusGateClientDto.generate({
+      message_id,
+      status,
+    }));
   }
 }

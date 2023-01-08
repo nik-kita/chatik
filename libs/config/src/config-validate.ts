@@ -4,10 +4,7 @@ import { validateSync } from 'class-validator';
 
 export function configValidate(Expected: new () => any) {
   return (config: Record<string, unknown>) => {
-    const validatedConf = plainToInstance(Expected, {
-      NODE_ENV: process.env.NODE_ENV,
-      ...config,
-    }, {
+    const validatedConf = plainToInstance(Expected, config, {
       exposeDefaultValues: true,
     });
     const errors = validateSync(validatedConf);

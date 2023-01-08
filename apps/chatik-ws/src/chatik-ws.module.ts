@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MessagesGateway } from './gateways/messages.gateway';
+import { MessageGate } from './gateways/message-gate.gateway';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
 import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
 
@@ -26,9 +26,10 @@ import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-con
     }),
   ],
   providers: [
-    MessagesGateway,
+    MessageGate,
     OnlyAuthHandleConnectionService,
     ConnectedSocketManager,
+    MessagePgRepo,
     UserPgRepo,
     MessagePgRepo,
   ],

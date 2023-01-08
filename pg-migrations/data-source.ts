@@ -9,13 +9,9 @@ import { join } from 'path';
 config();
 config({ path: '.default.env' });
 
-const envFile = ({
-  prod: '',
-  dev: '.dev',
-  test: '.test',
-} satisfies Record<NodeEnv, string>)[process.env.NODE_ENV || 'test'];
+config({ path: `.${process.env.NODE_ENV}.env`})
 
-config({ path: `${envFile}.env` });
+
 
 
 class DataSourceEnv extends PickType(FullConfig, [
@@ -27,10 +23,17 @@ class DataSourceEnv extends PickType(FullConfig, [
   'PG_DB_NAME',
 ]) { }
 
-const dsEnv: DataSourceEnv = configValidate(DataSourceEnv)(process.env);
+let dsEnv!: DataSourceEnv;
 
-export const AppDataSource = new DataSource({
-  type: 'postgres',
+try {
+  dsEnv = configValidate(DataSourceEnv)(process.env);
+} catch (error) {
+  console.error(error);
+  process.exit(1);
+}
+
+const configuration = {
+  type: 'postgres' as const,
   host: dsEnv.PG_HOST,
   port: dsEnv.PG_PORT,
   username: dsEnv.PG_USER,
@@ -40,4 +43,6 @@ export const AppDataSource = new DataSource({
   logging: true,
   database: dsEnv.PG_DB_NAME,
   migrations: [join(__dirname, 'migrations/*')],
-});
+};
+
+export const AppDataSource = new DataSource(configuration);

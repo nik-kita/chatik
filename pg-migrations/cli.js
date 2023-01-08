@@ -80,7 +80,7 @@ async function main() {
       exec(`FORCE_COLOR=true npx typeorm-ts-node-esm migration:revert -d ${dsPath}`,
         (err, stdOut, stdErr) => {
           if (err || stdErr) {
-            console.error(err || stdErr);
+            console.error(err || stdErr, stdOut);
 
             return reject(err);
 
