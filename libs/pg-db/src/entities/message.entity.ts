@@ -1,4 +1,4 @@
-import { IPgMessage } from '../../../types/src/pg-entities/pg-message.interface';
+import { IPgMessage } from '../../../types/src/pg';
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
 
