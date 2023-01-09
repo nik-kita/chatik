@@ -9,6 +9,7 @@ export class RoomEntity implements IPgRoom {
   room_id: string;
 
   @Column({
+    type: 'enum',
     enum: PgRoomTypeEnum,
     nullable: false,
   })
