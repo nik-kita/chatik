@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../../src/app.controller';
 import { AppService } from '../../src/app.service';
-import { UserPgRepo } from '../../../../libs/pg-db/src';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -11,7 +10,6 @@ describe('AppController', () => {
       controllers: [AppController],
       providers: [
         AppService,
-        { provide: UserPgRepo, useValue: {} },
       ],
     }).compile();
 
