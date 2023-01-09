@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IPgUser } from '../../../types/src';
+import { IPgUser } from '../../../types/src/pg';
 
 @Entity({ name: 'user' })
 export class UserEntity implements IPgUser {

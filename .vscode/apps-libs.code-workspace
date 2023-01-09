@@ -1,23 +1,31 @@
 {
   "folders": [
     {
+      "path": "../libs/dto",
+      "name": "lib/dto"
+    },
+    {
       "path": "../libs/types",
       "name": "lib/types"
+    },
+    {
+      "path": "../libs/pg-db",
+      "name": "lib/pg-db"
     },
     {
       "path": "..",
       "name": "_cwd"
     },
     {
-      "path": "../apps/chatik-ws/src",
+      "path": "../apps/chatik-ws",
       "name": "chatik-ws",
     },
     {
-      "path": "../apps/chatik/src",
+      "path": "../apps/chatik",
       "name": "chatik",
     },
     {
-      "path": "../apps/chatik-auth/src",
+      "path": "../apps/chatik-auth",
       "name": "chatik-auth",
     },
   ],
@@ -25,7 +33,10 @@
     "workbench.sideBar.location": "right",
     "cSpell.words": [
       "Chatik",
+      "flipside",
+      "Flipside",
       "nestjs",
+      "typeorm",
       "websockets"
     ]
   }

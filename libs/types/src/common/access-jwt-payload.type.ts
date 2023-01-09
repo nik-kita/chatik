@@ -1,3 +1,5 @@
-import { IPgUser } from '../pg-entities/pg-user.interface';
+import { IPgUser } from '../pg/entity-interfaces/pg-user.interface';
 
-export type JwtAccessPayload = Pick<IPgUser, 'user_id'>;
+export type JwtAccessPayload = Pick<IPgUser, 'user_id'> & {
+  iat: number, // TODO complete and concrete jwt payload type
+};

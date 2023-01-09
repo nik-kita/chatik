@@ -3,5 +3,5 @@ export class LoginResDto {
   jwt: {
     access: string;
     refresh: string;
-  }
+  };
 }
