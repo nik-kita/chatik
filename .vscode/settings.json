@@ -3,6 +3,7 @@
     "chatik",
     "citext",
     "dtos",
+    "flipside",
     "nestjs",
     "typeorm",
     "websockets"
