@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IPgMember } from '../../../types/src/pg/entity-interfaces/pg-member.interface';
+import { IPgMember } from '../../../types/src/pg';
 
 
 @Entity({ name: 'member' })

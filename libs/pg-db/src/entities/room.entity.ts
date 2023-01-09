@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IPgRoom } from '../../../types/src/pg/entity-interfaces/pg-room.interface';
-import { PgRoomTypeEnum } from '../../../types/src/pg/enums/pg-room-type.enum';
+import { IPgRoom, PgRoomTypeEnum } from '../../../types/src/pg';
 
 
 @Entity({ name: 'room' })
