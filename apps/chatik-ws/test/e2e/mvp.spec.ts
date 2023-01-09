@@ -96,7 +96,7 @@ describe('MVP', () => {
 
     if (!client) return;
 
-    await new Promise<void>((resolve) => {
+    await new Promise<void>(async (resolve) => {
       const off = setTimeout(() => {
         resolve();
         expect('not').toBe('here');
@@ -106,6 +106,10 @@ describe('MVP', () => {
         clearTimeout(off);
         resolve();
         expect(data).toBeDefined();
+      });
+
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 2_000);
       });
 
       const data: GateMessage<SendMessageGateDto> = {
