@@ -2,8 +2,8 @@ import { IsUUID } from 'class-validator';
 
 export class CreateOneToOneRoomReqDto {
   @IsUUID()
-  firstUserId: string;
+  initiatorUserId: string;
 
   @IsUUID()
-  secondUserId: string;
+  flipsideUserId: string;
 }

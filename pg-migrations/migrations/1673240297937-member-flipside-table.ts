@@ -23,7 +23,9 @@ export class memberFlipsideTable1673240297937 implements MigrationInterface {
                 check (flipside_id = flipside_user_id),
 
                 flipside_user_id uuid
-                constraint fk_flipside_user_user_id references "user" ("user_id")
+                constraint fk_flipside_user_user_id references "user" ("user_id"),
+
+                unique (member_id, flipside_id)
             );
         `);
     }

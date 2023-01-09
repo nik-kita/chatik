@@ -3,8 +3,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAccessStrategy } from './strategies/jwt-access/jwt-access.strategy';
-import { RoomEntity } from '../../../../libs/pg-db/src/entities/room.entity';
-import { MemberEntity } from '../../../../libs/pg-db/src/entities/member.entity';
+import { RoomEntity, MemberEntity, MemberFlipsideEntity } from '../../../../libs/pg-db/src/entities';
 
 
 const SHARING_MODULES = [
@@ -14,6 +13,7 @@ const SHARING_MODULES = [
     UserEntity,
     RoomEntity,
     MemberEntity,
+    MemberFlipsideEntity,
   ])];
 const SHARING_PROVIDERS = [
   JwtAccessStrategy,

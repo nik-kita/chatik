@@ -18,10 +18,26 @@ export abstract class PgRepo<
     return res as Record<PK, string>;
   }
 
+  async insertMany(data: [InsertE, ...InsertE[]]) {
+    const { raw } = await this.repo.insert(data);
+
+    return raw as Record<PK, string>[];
+  }
+
   getByPK<S extends (keyof E)[]>(pk: Pick<E, PK>, select?: S) {
     return this.repo.findOne({
       where: pk as FindOptionsWhere<E>,
       select,
+    });
+  }
+
+  getOne<
+    W extends FindOptionsWhere<E>,
+    S extends (keyof E)[] = [typeof this.pk],
+  >(where: W, select?: S) {
+    return this.repo.findOne({
+      where,
+      select: select || [this.pk],
     });
   }
 
