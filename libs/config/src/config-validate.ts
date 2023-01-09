@@ -3,7 +3,7 @@ import { validateSync } from 'class-validator';
 
 
 export function configValidate(Expected: new () => any) {
-  return (config: Record<string, unknown>) => {
+  return (config: Record<string, unknown> = {}) => {
     const validatedConf = plainToInstance(Expected, config, {
       exposeDefaultValues: true,
     });

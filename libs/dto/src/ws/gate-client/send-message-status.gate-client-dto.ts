@@ -1,5 +1,5 @@
 import { MessageEntity } from '../../../../pg-db/src';
-import { GateClientEvent, StatusForSender } from '../../../../types/src';
+import { GateClientEvent, StatusForSender } from '../../../../types/src/ws';
 import { GateClientDto } from './gate-client-dto';
 
 
