@@ -2,9 +2,9 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ChatikAuthEnv } from '@app/config/chatik-auth';
-import { JWT_ACCESS_STRATEGY_NAME } from '../strategy-names.const';
 import { Injectable } from '@nestjs/common';
-import { JwtAccessPayload } from '../../../../../libs/types/src';
+import { JwtAccessPayload } from '../../../../../../libs/types/src';
+import { JWT_ACCESS_STRATEGY_NAME } from './jwt-access-strategy-name.const';
 
 
 @Injectable()

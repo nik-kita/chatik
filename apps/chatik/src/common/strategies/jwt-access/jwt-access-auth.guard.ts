@@ -1,6 +1,6 @@
 import { AuthGuard } from '@nestjs/passport';
-import { JWT_ACCESS_STRATEGY_NAME } from '../strategy-names.const';
 import { Injectable } from '@nestjs/common';
+import { JWT_ACCESS_STRATEGY_NAME } from './jwt-access-strategy-name.const';
 
 
 @Injectable()

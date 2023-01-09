@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserPgRepo } from '../../../libs/pg-db/src';
+import { AppController } from '../../src/app.controller';
+import { AppService } from '../../src/app.service';
+import { UserPgRepo } from '../../../../libs/pg-db/src';
 
 describe('AppController', () => {
   let appController: AppController;

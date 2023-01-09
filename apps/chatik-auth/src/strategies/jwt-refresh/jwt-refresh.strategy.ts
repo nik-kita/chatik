@@ -4,8 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-jwt';
-import { JWT_REFRESH_STRATEGY_NAME } from '../strategy-names.const';
 import { JwtRefreshPayload } from '../../../../../libs/types/src';
+import { JWT_REFRESH_STRATEGY_NAME } from './jwt-refresh-strategy-name.const';
 
 
 @Injectable()
