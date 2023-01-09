@@ -1,4 +1,4 @@
-import { GateClient, GateClientEvent, GateClientMessage } from '../../../../types/src';
+import { GateClient, GateClientEvent, GateClientMessage } from '../../../../types/src/ws';
 import { SendMessageGateDto } from '../gate/send-message.gate-dto';
 import { GateClientDto } from './gate-client-dto';
 

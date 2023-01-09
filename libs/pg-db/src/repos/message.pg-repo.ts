@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 export class MessagePgRepo extends PgRepo<
   MessageEntity,
   'message_id',
-  { text, user_id }
+  { text, user_id, room_id }
 > {
   constructor(
     @InjectRepository(MessageEntity)

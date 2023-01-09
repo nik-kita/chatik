@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 
 
 async function bootstrap() {
-  const logger = new Logger('Chatik boot')
+  const logger = new Logger('Chatik boot');
   const app = await NestFactory.create(AppModule);
   const config = app.get<ConfigService<ChatikEnv>>(ConfigService);
   const port = config.get('CHATIK_PORT');

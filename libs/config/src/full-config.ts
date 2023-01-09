@@ -23,7 +23,7 @@ export class FullConfig {
   PG_PASSWORD = 'postgres';
 
   @IsString()
-  PG_DB_NAME = `chatik_${this.NODE_ENV}`
+  PG_DB_NAME = `chatik_${this.NODE_ENV}`;
 
   @Transform(({ value }) => +value)
   @IsInt()

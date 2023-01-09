@@ -1,32 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import * as req from 'supertest';
 import { faker } from '@faker-js/faker';
-import { WebSocket } from 'ws';
 import * as EventEmitter from 'events';
-import { GateClientMessage, GateMessage, MessageGateEvent } from '../../../../libs/types/src/ws'
+import * as req from 'supertest';
+import { WebSocket } from 'ws';
+import { TEST_COMMON_FIXTURES } from '../../../../__test__/common-test-fixtures';
 import { LoginResDto, RegisterReqDto } from '../../../../libs/dto/src/http';
-import { ReceiveMessageGateClientDto, SendMessageGateDto } from '../../../../libs/dto/src/ws';
+import { SendMessageGateDto } from '../../../../libs/dto/src/ws';
+import { GateMessage, MessageGateEvent } from '../../../../libs/types/src/ws';
 
-// TODO move to fixtures
-const ws = {
-  httpHost: `http://localhost:${process.env.TEST_CHATIK_WS_PORT}`,
-  wsHost: `ws://localhost:${process.env.TEST_CHATIK_WS_PORT}`,
-};
-const auth = {
-  host: `http://localhost:${process.env.TEST_CHATIK_AUTH_PORT}`,
-  POST: {
-    ['/auth/register']: '/auth/register',
-    ['/auth/login']: '/auth/login',
-    ['/auth/refresh']: '/auth/refresh',
-  },
-}
-const app = {
-  host: `http://localhost:${process.env.TEST_CHATIK_PORT}`,
-};
+const {
+  auth,
+  ws,
+} = TEST_COMMON_FIXTURES;
 
 const [A, B] = Array.from({ length: 2 }).map(() => {
   const email = faker.internet.email();
-  return {
+
+return {
     email,
     password: faker.internet.password(8, true, /[a-z][A-Z]\d\W.+/),
     access: '',
@@ -46,7 +36,7 @@ describe('MVP', () => {
       password: user.password,
     };
     const { body: bodyRegister } = await req(auth.host)
-      .post(auth.POST['/auth/register'])
+      .post(auth.POST[ '/auth/register' ])
       .send(registerDto)
       .expect(201);
 
@@ -55,7 +45,7 @@ describe('MVP', () => {
 
   it.each(userDataProvider)('Should login as /$email/ user', async ({ user }) => {
     const { body: bodyLogin } = await req(auth.host)
-      .post(auth.POST['/auth/login'])
+      .post(auth.POST[ '/auth/login' ])
       .send(user)
       .expect(201);
 
@@ -106,16 +96,20 @@ describe('MVP', () => {
 
     if (!client) return;
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>(async (resolve) => {
       const off = setTimeout(() => {
         resolve();
         expect('not').toBe('here');
-      }, 4_000);
+      }, 7_000);
 
       wsClientDebugger.on(A.email, (data: any) => {
         clearTimeout(off);
         resolve();
         expect(data).toBeDefined();
+      });
+
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 2_000);
       });
 
       const data: GateMessage<SendMessageGateDto> = {

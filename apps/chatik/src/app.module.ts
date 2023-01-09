@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ChatikConfigModule } from '@app/config/chatik';
-import { PgDbModule, UserEntity, UserPgRepo } from '@app/pg-db';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatikConfigModule } from '../../../libs/config/src/chatik';
+import { RoomModule } from './components/room/room.module';
 
 @Module({
-  imports: [ChatikConfigModule, PgDbModule, TypeOrmModule.forFeature([
-    UserEntity,
-  ])],
+  imports: [
+    ChatikConfigModule,
+    RoomModule,
+  ],
   controllers: [AppController],
-  providers: [AppService, UserPgRepo],
+  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
