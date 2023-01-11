@@ -17,7 +17,7 @@ export class RoomController {
   @Post('one-to-one')
   async createOneToOneRoom(
     @Body() { flipsideUserId }: CreateOneToOneRoomReqDto,
-    @Request() { user_id }: JwtAccessPayload,
+    @Request() { user: { user_id } }: { user: JwtAccessPayload },
   ): Promise<Pick<IPgRoom, 'room_id'>> {
     // TODO add to HttpExceptionFilter /duplicate pg error/ case
     const response = await this.roomRepo.insert({ type: PgRoomTypeEnum.ONE_TO_ONE });
@@ -45,7 +45,7 @@ export class RoomController {
 
   @Get()
   async getOneToOneChatsWithMe(
-    @Request() { user_id }: JwtAccessPayload,
+    @Request() { user: { user_id } }: { user: JwtAccessPayload },
   ): Promise<Pick<IPgMember, 'flipside_id' | 'room_id'>[]> {
     return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE }, {
       select: ['flipside_id', 'room_id'],
