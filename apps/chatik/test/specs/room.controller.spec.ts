@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import * as req from 'supertest';
@@ -47,18 +47,36 @@ describe('RoomController', () => {
       .useValue(mock.authGuard({ user_id: myId }))
       .compile();
 
-    app = await fixture.createNestApplication().init();
+    app = await fixture
+      .createNestApplication()
+      .useGlobalPipes(new ValidationPipe())
+      .init();
+
+    // app.useGlobalPipes(new ValidationPipe());
   });
 
-  it('Should create room', async () => {
+  it.each([
+    {},
+    { hello: 'world' },
+    { flipsideUserId: 'no-uuid' },
+  ])('Should not allow req with invalid body', async (reqBody) => {
+    const res = await req(app.getHttpServer())
+      .post(POST[ '/room/one-to-one' ])
+      .send(reqBody);
+
+    expect(res.status).toBeGreaterThanOrEqual(400);
+    expect(res.status).toBeLessThan(500);
+  });
+
+  it.each([
+    { flipsideUserId },
+  ])('Should create room', async (reqBody) => {
+    console.log(reqBody);
     const { body: bodyCreateRoom } = await req(app.getHttpServer())
       .post(POST[ '/room/one-to-one' ])
-      .send({
-        flipsideUserId,
-      }).expect(201);
+      .send(reqBody).expect(201);
 
-    expect(bodyCreateRoom).toBeInstanceOf(Object);
-    expect(bodyCreateRoom.room_id).toBe(createdRoomId);
+    expect(bodyCreateRoom?.room_id).toBe(createdRoomId);
   });
 
   afterAll(async () => {
