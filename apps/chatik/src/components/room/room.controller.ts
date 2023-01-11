@@ -1,8 +1,9 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { MemberFlipsidePgRepo, MemberPgRepo, RoomPgRepo } from '../../../../../libs/pg-db/src';
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { CreateOneToOneRoomReqDto } from '../../../../../libs/dto/src/http';
-import { PgRoomTypeEnum } from '../../../../../libs/types/src/pg';
+import { MemberPgRepo, RoomPgRepo } from '../../../../../libs/pg-db/src';
 import { JwtAccessAuthGuard } from '../../common/strategies/jwt-access/jwt-access-auth.guard';
+import { IPgMember, IPgRoom, PgRoomTypeEnum } from '../../../../../libs/types/src/pg';
+import { JwtAccessPayload } from '../../../../../libs/types/src';
 
 
 @UseGuards(JwtAccessAuthGuard)
@@ -10,54 +11,44 @@ import { JwtAccessAuthGuard } from '../../common/strategies/jwt-access/jwt-acces
 export class RoomController {
   constructor(
     private roomRepo: RoomPgRepo,
-    private flipsideRepo: MemberFlipsidePgRepo,
     private memberRepo: MemberPgRepo,
   ) { }
 
   @Post('one-to-one')
   async createOneToOneRoom(
-    @Body() { initiatorUserId, flipsideUserId }: CreateOneToOneRoomReqDto,
-  ): Promise<{
-    room_id: string,
-  }> {
-    const oldFlipside = await this.flipsideRepo.getOne({
-      user_id: initiatorUserId,
-      flipside_id: flipsideUserId,
-    }, ['room_id', 'member_flipside_id']);
+    @Body() { flipsideUserId }: CreateOneToOneRoomReqDto,
+    @Request() { user: { user_id } }: { user: JwtAccessPayload },
+  ): Promise<Pick<IPgRoom, 'room_id'>> {
+    // TODO add to HttpExceptionFilter /duplicate pg error/ case
+    const response = await this.roomRepo.insert({ type: PgRoomTypeEnum.ONE_TO_ONE });
 
-    if (!oldFlipside) {
-      const { room_id } = await this.roomRepo.insert({
-        type: PgRoomTypeEnum.ONE_TO_ONE,
-      });
+    // TODO check is it really safe to avoid waiting for members insertion result
+    void this.memberRepo.insertMany([
+      {
+        user_id,
+        flipside_id: flipsideUserId,
+        room_type: PgRoomTypeEnum.ONE_TO_ONE,
+        flipside_user_id: flipsideUserId,
+        room_id: response.room_id,
+      },
+      {
+        user_id: flipsideUserId,
+        flipside_id: user_id,
+        room_type: PgRoomTypeEnum.ONE_TO_ONE,
+        flipside_user_id: user_id,
+        room_id: response.room_id,
+      },
+    ]);
 
-      // TODO check is it safe to skip awaiting these insertions
-      void this.memberRepo.insertMany([
-        { user_id: initiatorUserId, room_id },
-        { user_id: flipsideUserId, room_id },
-      ]).then(([initiator, flipsideMember]) => {
-        this.flipsideRepo.insertMany([
-          {
-            user_id: initiatorUserId,
-            flipside_id: flipsideUserId,
-            flipside_type: PgRoomTypeEnum.ONE_TO_ONE,
-            room_id,
-            member_id: initiator.member_id,
-            flipside_user_id: flipsideUserId,
-          },
-          {
-            user_id: flipsideUserId,
-            flipside_id: initiatorUserId,
-            flipside_type: PgRoomTypeEnum.ONE_TO_ONE,
-            room_id,
-            member_id: flipsideMember.member_id,
-            flipside_user_id: initiatorUserId,
-          },
-        ]);
-      });
+    return response;
+  }
 
-      return { room_id };
-    } else {
-      return { room_id: oldFlipside.room_id };
-    }
+  @Get()
+  async getOneToOneChatsWithMe(
+    @Request() { user: { user_id } }: { user: JwtAccessPayload },
+  ): Promise<Pick<IPgMember, 'flipside_id' | 'room_id'>[]> {
+    return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE }, {
+      select: ['flipside_id', 'room_id'],
+    });
   }
 }

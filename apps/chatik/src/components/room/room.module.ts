@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { MemberPgRepo, RoomPgRepo, UserPgRepo } from '../../../../../libs/pg-db/src';
 import { CommonModule } from '../../common/common.module';
-import { MemberFlipsidePgRepo, MemberPgRepo, RoomPgRepo, UserPgRepo } from '../../../../../libs/pg-db/src';
 import { RoomController } from './room.controller';
 
 @Module({
@@ -9,7 +9,6 @@ import { RoomController } from './room.controller';
     MemberPgRepo,
     RoomPgRepo,
     UserPgRepo,
-    MemberFlipsidePgRepo,
   ],
   controllers: [RoomController],
 })
