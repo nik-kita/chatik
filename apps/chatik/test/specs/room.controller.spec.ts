@@ -51,8 +51,6 @@ describe('RoomController', () => {
       .createNestApplication()
       .useGlobalPipes(new ValidationPipe())
       .init();
-
-    // app.useGlobalPipes(new ValidationPipe());
   });
 
   it.each([
@@ -70,7 +68,7 @@ describe('RoomController', () => {
 
   it.each([
     { flipsideUserId },
-  ])('Should create room', async (reqBody) => {
+  ])('Should create room (mock)', async (reqBody) => {
     console.log(reqBody);
     const { body: bodyCreateRoom } = await req(app.getHttpServer())
       .post(POST[ '/room/one-to-one' ])
