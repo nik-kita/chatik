@@ -14,7 +14,7 @@ export class MemberEntity implements IPgMember {
   room_id: string;
 
   @Column({ type: 'enum', nullable: false, enum: PgRoomTypeEnum })
-  flipside_type: PgRoomTypeEnum;
+  room_type: PgRoomTypeEnum;
 
   @Column({ type: 'uuid', nullable: false, })
   flipside_id: string;

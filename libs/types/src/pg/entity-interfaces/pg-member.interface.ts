@@ -8,7 +8,7 @@ export interface IPgMember extends Pick<IPgUser, 'user_id'>,
 
   flipside_id: string;
 
-  flipside_type: PgRoomTypeEnum;
+  room_type: PgRoomTypeEnum;
 
   flipside_user_id: string;
 }

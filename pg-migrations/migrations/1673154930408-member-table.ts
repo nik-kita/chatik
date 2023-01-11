@@ -13,7 +13,7 @@ export class memberTable1673154930408 implements MigrationInterface {
                 room_id uuid not null
                 constraint fk_room_room_id references "room" ("room_id"),
 
-                flipside_type room_type not null,
+                room_type room_type not null,
 
                 flipside_user_id uuid
                 constraint fk_flipside_user_user_id references "user" ("user_id"),

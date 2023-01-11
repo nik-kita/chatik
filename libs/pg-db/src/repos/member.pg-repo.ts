@@ -10,7 +10,7 @@ export class MemberPgRepo extends
       room_id,
       user_id,
       flipside_id,
-      flipside_type,
+      room_type,
     } & ({ flipside_user_id })
   > {
   constructor(

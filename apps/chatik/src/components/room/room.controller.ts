@@ -27,7 +27,7 @@ export class RoomController {
       void this.memberRepo.insertMany([{
         user_id,
         flipside_id: flipsideUserId,
-        flipside_type: PgRoomTypeEnum.ONE_TO_ONE,
+        room_type: PgRoomTypeEnum.ONE_TO_ONE,
         flipside_user_id: flipsideUserId,
         room_id: response.room_id,
       }]);
@@ -39,6 +39,6 @@ export class RoomController {
   async getOneToOneChatsWithMe(
     @Request() { user_id }: JwtAccessPayload,
   ) {
-    return this.memberRepo.get({ user_id, flipside_type: PgRoomTypeEnum.ONE_TO_ONE });
+    return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE });
   }
 }
