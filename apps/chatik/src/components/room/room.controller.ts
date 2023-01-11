@@ -21,18 +21,27 @@ export class RoomController {
   ): Promise<{
     room_id: string,
   }> {
-      // TODO add to HttpExceptionFilter /duplicate pg error/ case
-      const response = await this.roomRepo.insert({ type: PgRoomTypeEnum.ONE_TO_ONE });
+    // TODO add to HttpExceptionFilter /duplicate pg error/ case
+    const response = await this.roomRepo.insert({ type: PgRoomTypeEnum.ONE_TO_ONE });
 
-      void this.memberRepo.insertMany([{
+    void this.memberRepo.insertMany([
+      {
         user_id,
         flipside_id: flipsideUserId,
         room_type: PgRoomTypeEnum.ONE_TO_ONE,
         flipside_user_id: flipsideUserId,
         room_id: response.room_id,
-      }]);
+      },
+      {
+        user_id: flipsideUserId,
+        flipside_id: user_id,
+        room_type: PgRoomTypeEnum.ONE_TO_ONE,
+        flipside_user_id: user_id,
+        room_id: response.room_id,
+      }
+    ]);
 
-      return response;
+    return response;
   }
 
   @Get()
