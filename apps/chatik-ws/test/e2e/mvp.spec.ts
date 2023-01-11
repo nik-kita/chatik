@@ -120,7 +120,7 @@ describe('MVP', () => {
 Hi! ${faker.name.firstName()}! How are You? \
 I know cool song - "${faker.music.songName()}"!\
 `,
-        }
+        },
       };
 
       client.send(JSON.stringify(data));

@@ -32,7 +32,7 @@ const SHARING_MODULES = [
         secret: config.get('JWT_ACCESS_SECRET'),
         verifyOptions: {
           ignoreExpiration: false,
-        }
+        },
       };
     },
   }),

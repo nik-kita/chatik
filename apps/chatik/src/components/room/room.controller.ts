@@ -37,7 +37,7 @@ export class RoomController {
         room_type: PgRoomTypeEnum.ONE_TO_ONE,
         flipside_user_id: user_id,
         room_id: response.room_id,
-      }
+      },
     ]);
 
     return response;
@@ -48,7 +48,7 @@ export class RoomController {
     @Request() { user_id }: JwtAccessPayload,
   ): Promise<Pick<IPgMember, 'flipside_id' | 'room_id'>[]> {
     return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE }, {
-      select: ['flipside_id', 'room_id']
+      select: ['flipside_id', 'room_id'],
     });
   }
 }

@@ -23,7 +23,7 @@ export class WsExceptionFilter implements ExceptionFilter {
       data: {
         name: exception?.name,
         message: exception?.message,
-      }
+      },
     };
     const strRes = JSON.stringify(res);
 

@@ -4,7 +4,7 @@ import {
   OnGatewayDisconnect,
   OnGatewayInit,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
