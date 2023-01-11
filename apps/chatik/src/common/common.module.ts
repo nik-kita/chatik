@@ -2,8 +2,8 @@ import { PgDbModule, UserEntity } from '@app/pg-db';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MemberEntity, RoomEntity } from '../../../../libs/pg-db/src/entities';
 import { JwtAccessStrategy } from './strategies/jwt-access/jwt-access.strategy';
-import { RoomEntity, MemberEntity, MemberFlipsideEntity } from '../../../../libs/pg-db/src/entities';
 
 
 const SHARING_MODULES = [
@@ -13,7 +13,6 @@ const SHARING_MODULES = [
     UserEntity,
     RoomEntity,
     MemberEntity,
-    MemberFlipsideEntity,
   ])];
 const SHARING_PROVIDERS = [
   JwtAccessStrategy,

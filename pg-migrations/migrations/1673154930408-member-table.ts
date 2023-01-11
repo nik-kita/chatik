@@ -11,7 +11,18 @@ export class memberTable1673154930408 implements MigrationInterface {
                 constraint fk_user_user_id references "user" ("user_id"),
 
                 room_id uuid not null
-                constraint fk_room_room_id references "room" ("room_id")
+                constraint fk_room_room_id references "room" ("room_id"),
+
+                flipside_type room_type not null,
+
+                flipside_user_id uuid
+                constraint fk_flipside_user_user_id references "user" ("user_id"),
+
+                flipside_id uuid not null
+                constraint check_that_eq_to_one_of_flipside_fks
+                check (flipside_id = flipside_user_id),
+
+                unique (user_id, flipside_id)
             );
         `);
     }
