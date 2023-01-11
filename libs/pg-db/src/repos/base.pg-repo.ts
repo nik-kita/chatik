@@ -33,17 +33,17 @@ export abstract class PgRepo<
 
   getOne<
     W extends FindOptionsWhere<E>,
-    S extends (keyof E)[] = [typeof this.pk],
+    S extends (keyof E)[],
   >(where: W, select?: S) {
     return this.repo.findOne({
       where,
       select: select || [this.pk],
-    });
+    }) as Promise<Pick<E, S[number]>>;
   }
 
   get<
     W extends FindOptionsWhere<E>,
-    S extends (keyof E)[] = [typeof this.pk],
+    S extends (keyof E)[],
   >(
     where: W,
     options: {
@@ -52,7 +52,7 @@ export abstract class PgRepo<
       skip?: number,
       order?: Record<S[number], {
         direction: 'asc' | 'desc',
-        nulls?: 'fist' | 'last',
+        nulls?: 'first' | 'last',
       }>,
     } = {},
   ) {
@@ -69,6 +69,6 @@ export abstract class PgRepo<
       take: limit,
       skip,
       order,
-    });
+    }) as Promise<Pick<E, S[number]>[]>;
   }
 }

@@ -4,13 +4,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatikWsConfigModule, ChatikWsEnv } from '../../../../libs/config/src/chatik-ws';
 import { MemberPgRepo, MessageEntity, MessagePgRepo, PgDbModule, UserEntity, UserPgRepo } from '../../../../libs/pg-db/src';
-import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
+import { WsJwtAccessGuard } from './services/ws-jwt-access.guard';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
 import { MemberEntity } from '../../../../libs/pg-db/src/entities/member.entity';
 import { WsExceptionFilter } from './exceptions/ws-exception.filter';
 
 const SHARING_PROVIDERS = [
-  OnlyAuthHandleConnectionService,
+  WsJwtAccessGuard,
   ConnectedSocketManager,
   MessagePgRepo,
   MemberPgRepo,
@@ -32,7 +32,7 @@ const SHARING_MODULES = [
         secret: config.get('JWT_ACCESS_SECRET'),
         verifyOptions: {
           ignoreExpiration: false,
-        }
+        },
       };
     },
   }),

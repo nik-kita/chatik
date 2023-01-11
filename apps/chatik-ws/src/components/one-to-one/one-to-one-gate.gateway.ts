@@ -3,26 +3,24 @@ import { ConnectedSocket, MessageBody, WebSocketGateway } from '@nestjs/websocke
 import { WebSocket } from 'ws';
 import { GateEvent } from '../../../../../libs/decorators/src';
 import { ReceiveMessageGateClientDto, SendMessageGateDto, SendMessageStatusGateClientDto } from '../../../../../libs/dto/src/ws';
-import { ConnectionGate } from '../../common/connection-gate.gateway';
-import { ConnectedSocketManager } from '../../common/services/connected-socket-manager';
-import { OnlyAuthHandleConnectionService } from '../../common/services/only-auth-handle-connection.service';
-import { WsExceptionFilter } from '../../common/exceptions/ws-exception.filter';
 import { IMessageGate, StatusForSender } from '../../../../../libs/types/src/ws';
+import { ConnectionGate } from '../../common/connection-gate.gateway';
+import { WsExceptionFilter } from '../../common/exceptions/ws-exception.filter';
+import { ConnectedSocketManager } from '../../common/services/connected-socket-manager';
+import { WsJwtAccessGuard } from '../../common/services/ws-jwt-access.guard';
 
 
 @WebSocketGateway()
 @UseFilters(WsExceptionFilter)
 export class OneToOneGate extends ConnectionGate implements IMessageGate {
   constructor(
-    protected onlyAuthGuard: OnlyAuthHandleConnectionService,
+    protected wsJwtAccessGuard: WsJwtAccessGuard,
     protected connectedSocketManager: ConnectedSocketManager,
-    protected wsExceptionFilter: WsExceptionFilter,
   ) {
     super(
-      onlyAuthGuard,
+      wsJwtAccessGuard,
       connectedSocketManager,
       new Logger(OneToOneGate.name),
-      wsExceptionFilter,
     );
   }
 

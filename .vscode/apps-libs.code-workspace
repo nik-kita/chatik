@@ -1,6 +1,14 @@
 {
   "folders": [
     {
+      "path": "../apps/chatik-ws",
+      "name": "chatik-ws",
+    },
+    {
+      "path": "../apps/chatik",
+      "name": "chatik",
+    },
+    {
       "path": "../libs/dto",
       "name": "lib/dto"
     },
@@ -13,20 +21,16 @@
       "name": "lib/pg-db"
     },
     {
-      "path": "..",
-      "name": "_cwd"
-    },
-    {
-      "path": "../apps/chatik-ws",
-      "name": "chatik-ws",
-    },
-    {
-      "path": "../apps/chatik",
-      "name": "chatik",
-    },
-    {
       "path": "../apps/chatik-auth",
       "name": "chatik-auth",
+    },
+    {
+      "path": "../.vscode",
+      "name": "_vscode",
+    },
+    {
+      "path": "..",
+      "name": "_cwd"
     },
   ],
   "settings": {

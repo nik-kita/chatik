@@ -16,6 +16,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'comma-dangle': ['error', 'always-multiline'],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [
       'warn',

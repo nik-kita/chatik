@@ -41,7 +41,7 @@ describe('Check server restriction for unauthorized ws-connections', () => {
     {
       secondWsConstructorArg: {
         headers: {
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTQwZTdmZDEtN2RjOS00YTAxLTlhMzItMzYwNDBlZWFkY2UxIiwiaWF0IjoxNjczMjE2Njg1LCJleHAiOjE2NzMyMTY3NDV9.VOqMlZ98BEDmxHLEzxfdzkE5dLqum3UjviOBNja5g00'
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTQwZTdmZDEtN2RjOS00YTAxLTlhMzItMzYwNDBlZWFkY2UxIiwiaWF0IjoxNjczMjE2Njg1LCJleHAiOjE2NzMyMTY3NDV9.VOqMlZ98BEDmxHLEzxfdzkE5dLqum3UjviOBNja5g00',
         },
       },
       should: 'Should at once disconnect with expired jwt',
