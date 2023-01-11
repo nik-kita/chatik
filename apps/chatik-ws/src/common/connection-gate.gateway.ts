@@ -1,4 +1,4 @@
-import { HttpStatus, Logger, UseFilters } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -8,22 +8,18 @@ import {
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 import { ConnectedSocketManager } from './services/connected-socket-manager';
-import { OnlyAuthHandleConnectionService } from './services/only-auth-handle-connection.service';
-import { WsExceptionFilter } from './exceptions/ws-exception.filter';
-import { UnAuthConnectionWsException } from './exceptions/unauth-connection.ws-exception';
+import { WsJwtAccessGuard } from './services/ws-jwt-access.guard';
 
 
 
 
 @WebSocketGateway()
-@UseFilters(WsExceptionFilter)
 export abstract class ConnectionGate implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
-    protected onlyAuthGuard: OnlyAuthHandleConnectionService,
+    protected wsJwtAccessGuard: WsJwtAccessGuard,
     protected connectedSocketManager: ConnectedSocketManager,
     protected logger: Logger,
-    protected wsExceptionFilter: WsExceptionFilter,
   ) { }
 
   @WebSocketServer()
@@ -34,35 +30,16 @@ export abstract class ConnectionGate implements OnGatewayInit, OnGatewayConnecti
   }
 
   async handleConnection(client: WebSocket, firstArg = {}) {
-    try {
-      const payload = await this.onlyAuthGuard.verifyUserFromBearer(firstArg);
+    const payload = await this.wsJwtAccessGuard.verifyUserFromBearer(client, firstArg);
 
-      this.connectedSocketManager.insert(payload.user_id, client);
-      this.logger.debug({
-        event: 'new connection',
-        user_id: payload.user_id,
-      });
-    } catch (error) {
-      if (error instanceof UnAuthConnectionWsException) {
-        this.wsExceptionFilter.catch(error, {
-          switchToWs: () => ({
-            getClient: () => client,
-          }),
-        } as any);
+    if (!payload) return;
 
-        return;
-      }
+    this.connectedSocketManager.insert(payload.user_id, client);
+    this.logger.debug({
+      event: 'new connection',
+      user_id: payload.user_id,
+    });
 
-      client.close(HttpStatus.INTERNAL_SERVER_ERROR + 4_000, JSON.stringify({
-        event: 'Error',
-        data: {
-          name: 'Internal server error',
-          message: 'Fail to connect by unknown reason',
-        },
-      }));
-
-      throw error;
-    }
   }
 
   handleDisconnect(client: any) {
