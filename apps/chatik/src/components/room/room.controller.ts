@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { CreateOneToOneRoomReqDto } from '../../../../../libs/dto/src/http';
 import { MemberPgRepo, RoomPgRepo } from '../../../../../libs/pg-db/src';
 import { JwtAccessAuthGuard } from '../../common/strategies/jwt-access/jwt-access-auth.guard';
-import { PgRoomTypeEnum } from '../../../../../libs/types/src/pg';
+import { IPgMember, IPgRoom, PgRoomTypeEnum } from '../../../../../libs/types/src/pg';
 import { JwtAccessPayload } from '../../../../../libs/types/src';
 
 
@@ -18,12 +18,11 @@ export class RoomController {
   async createOneToOneRoom(
     @Body() { flipsideUserId }: CreateOneToOneRoomReqDto,
     @Request() { user_id }: JwtAccessPayload,
-  ): Promise<{
-    room_id: string,
-  }> {
+  ): Promise<Pick<IPgRoom, 'room_id'>> {
     // TODO add to HttpExceptionFilter /duplicate pg error/ case
     const response = await this.roomRepo.insert({ type: PgRoomTypeEnum.ONE_TO_ONE });
 
+    // TODO check is it really safe to avoid waiting for members insertion result
     void this.memberRepo.insertMany([
       {
         user_id,
@@ -47,7 +46,9 @@ export class RoomController {
   @Get()
   async getOneToOneChatsWithMe(
     @Request() { user_id }: JwtAccessPayload,
-  ) {
-    return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE });
+  ): Promise<Pick<IPgMember, 'flipside_id' | 'room_id'>[]> {
+    return this.memberRepo.get({ user_id, room_type: PgRoomTypeEnum.ONE_TO_ONE }, {
+      select: ['flipside_id', 'room_id']
+    });
   }
 }
